@@ -216,4 +216,5 @@ pip-log.txt
 .mr.developer.cfg
 
 #CSV
-Positions_Errors.csv
+bin/Data/Positions_Errors.csv
+src/Data/Positions_Errors.csv
