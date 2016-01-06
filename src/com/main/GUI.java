@@ -37,6 +37,7 @@ public class GUI extends JFrame {
 					}
 					GUI window = new GUI();
 					window.frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -53,13 +54,14 @@ public class GUI extends JFrame {
 	private void initialize() {
 		final Browser browser = new Browser();
 		BrowserView browserView = new BrowserView(browser);
-
+		
 		// JFRAME
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		JFrame frame = new JFrame("EcoPompe");
 		frame.getContentPane().setBackground(Color.BLACK);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JPANEL NAVIGATOR
 		JPanel navigationBar = new JPanel();
 		navigationBar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -120,6 +122,7 @@ public class GUI extends JFrame {
 		navigationBar.add(txtLONG, gbc_txtLONG);
 		txtLONG.setColumns(10);
 
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// LABEL RADIUS
 		JLabel lblRadius = new JLabel("Rayon : 30 km");
 		lblRadius.setForeground(new Color(138, 202, 206));
@@ -143,11 +146,12 @@ public class GUI extends JFrame {
 		// Event Change Value on SLIDER
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				JavaScript.deleteStations(browser); // suppression des points Stations
+				JavaScript.deleteStations(browser); // suppression des points
+													// Stations
 				lblRadius.setText("Rayon : " + Integer.toString(slider.getValue()) + " km");
 				new Circle(browser, txtLAT, txtLONG, slider);
 				// Generation des Markers des stations
-				XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider); 
+				XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider);
 			}
 		});
 		// Event Mouse Wheel on SLIDER
@@ -177,6 +181,7 @@ public class GUI extends JFrame {
 		gbc_slider.gridy = 9;
 		navigationBar.add(slider, gbc_slider);
 
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Btn Point de départ
 		JButton btnPosDep = new JButton("Position de Départ");
 		btnPosDep.setBackground(new Color(39, 39, 39));
@@ -211,7 +216,7 @@ public class GUI extends JFrame {
 		gbc_btnRayon.gridy = 8;
 		navigationBar.add(btnRayon, gbc_btnRayon);
 
-		// Creation d'un POI (point of interest)
+		// Création du POI (point of interest)
 		JButton setMarkerButton = new JButton("Generate Stations");
 		GridBagConstraints gbc_setMarkerButton = new GridBagConstraints();
 		gbc_setMarkerButton.fill = GridBagConstraints.BOTH;
@@ -224,10 +229,10 @@ public class GUI extends JFrame {
 		setMarkerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					//Suppression des anciennes stations eventuelles
+					// Suppression des anciennes stations eventuelles
 					JavaScript.deleteStations(browser);
 					// Generation des Markers des stations
-					XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider); 
+					XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider);
 				} catch (Exception ex) {
 					System.out.println("Execption " + ex.getMessage());
 				}
@@ -276,7 +281,7 @@ public class GUI extends JFrame {
 		panel_haut.add(panel, gbc_panel);
 
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/Images/Logo4.png")));
+		lblNewLabel.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/Logo4.png")));
 		panel.add(lblNewLabel);
 
 		JPanel panel_1 = new JPanel();
@@ -293,11 +298,40 @@ public class GUI extends JFrame {
 		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
+
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//CARDLAYOUT config
+		JPanel myCards = new JPanel(new CardLayout());
+		
+		JPanel tabCarte = new JPanel();
+		tabCarte.setBackground(Color.BLACK);
+		tabCarte.setLayout(new BorderLayout(0, 0));
+		tabCarte.add(browserView, BorderLayout.CENTER);		
+		myCards.add("Carte", tabCarte);
+		
+		JPanel tabListe = new JPanel();
+		tabListe.setBackground(Color.GREEN); //Couleur de test visuel - à supprimer plus tard
+		//tabListe.setBackground(new Color(39, 39, 39));		
+		myCards.add("Liste_Stations", tabListe);
+
+		JPanel tabStat = new JPanel();
+		tabStat.setBackground(Color.BLUE);  //Couleur de test visuel - à supprimer plus tard
+		//tabStat.setBackground(new Color(39, 39, 39));
+		myCards.add("Statistiques", tabStat);
+		
+		CardLayout myCardLayout = (CardLayout)(myCards.getLayout());
+		
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
 		JButton btnCarte = new JButton("Carte");
 		btnCarte.setBackground(new Color(39, 39, 39));
 		btnCarte.setForeground(new Color(138, 202, 206));
 		btnCarte.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		btnCarte.setPreferredSize(new Dimension(200, 40));
+		btnCarte.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				myCardLayout.show(myCards, "Carte");
+			}
+		});
 		GridBagConstraints gbc_btnCarte = new GridBagConstraints();
 		gbc_btnCarte.fill = GridBagConstraints.BOTH;
 		gbc_btnCarte.insets = new Insets(0, 0, 5, 5);
@@ -310,6 +344,11 @@ public class GUI extends JFrame {
 		btnListePompe.setForeground(new Color(138, 202, 206));
 		btnListePompe.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		btnListePompe.setPreferredSize(new Dimension(200, 40));
+		btnListePompe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				myCardLayout.show(myCards, "Liste_Stations");
+			}
+		});
 		GridBagConstraints gbc_btnListePompe = new GridBagConstraints();
 		gbc_btnListePompe.fill = GridBagConstraints.BOTH;
 		gbc_btnListePompe.insets = new Insets(0, 0, 5, 5);
@@ -322,6 +361,11 @@ public class GUI extends JFrame {
 		btnInfos.setForeground(new Color(138, 202, 206));
 		btnInfos.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		btnInfos.setPreferredSize(new Dimension(200, 40));
+		btnInfos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				myCardLayout.show(myCards, "Statistiques");
+			}
+		});
 		GridBagConstraints gbc_btnInfos = new GridBagConstraints();
 		gbc_btnInfos.fill = GridBagConstraints.BOTH;
 		gbc_btnInfos.insets = new Insets(0, 0, 5, 5);
@@ -329,7 +373,6 @@ public class GUI extends JFrame {
 		gbc_btnInfos.gridy = 1;
 		panel_1.add(btnInfos, gbc_btnInfos);
 
-		// JPANEL TOOLBAR EN BAS
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JButtons du ruban Jpanel toolbar en bas
 		JButton zoomInButton = new JButton("Zoom In");
@@ -354,20 +397,26 @@ public class GUI extends JFrame {
 			}
 		});
 
-		// toolBar
+		
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// TOOLBAR EN BAS
 		JPanel toolBar_bas = new JPanel();
 		toolBar_bas.setBackground(new Color(39, 39, 39));
 		toolBar_bas.add(zoomInButton);
 		toolBar_bas.add(zoomOutButton);
 
 		frame.getContentPane().add(toolBar_bas, BorderLayout.SOUTH);
-		frame.getContentPane().add(browserView, BorderLayout.CENTER);
+
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// frame.getContentPane().add(browserView, BorderLayout.CENTER);
+		frame.getContentPane().add(/*tabbedPane*/ myCards, BorderLayout.CENTER);
 		frame.setSize(1538, 900);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
 		// Import de la carte de la page HTML (du serveur?) sur le browser
 		browser.loadURL(workingDir + "\\src\\Data\\HTML\\map.html");
+
 	}
 
 }

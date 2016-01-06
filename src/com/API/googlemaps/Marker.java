@@ -40,9 +40,9 @@ public class Marker {
 	 */
 	public Marker(Browser browser, double lat, double lng, String ID, String adr, String CP, String ville )
 	{		
-		String pathPics = "images/gas-station-red-black.png";
+		String pathPics = "img/gas-station-red-black.png";
 		
-		String contentString = "<img src=\"images/gas-station-red-black.png\" ALT=\"Station\"><h2>Station ID : " + ID + "</h2><br/> Lat : " + lat + "<br/> Long : " + lng + "<br/> Adresse : " + adr + "<br/> CP : " + CP + "<br/> Ville : " + ville.toUpperCase();
+		String contentString = "<img src=\"img/gas-station-red-black.png\" ALT=\"Station\"><h2>Station ID : " + ID + "</h2><br/> Lat : " + lat + "<br/> Long : " + lng + "<br/> Adresse : " + adr + "<br/> CP : " + CP + "<br/> Ville : " + ville.toUpperCase();
 		browser.executeJavaScript(
 				"var myLatlng = new google.maps.LatLng(" + lat + "," + lng + ");\n"
 			  + "var myinfowindow = new google.maps.InfoWindow({content: '"+ contentString +"' });"
