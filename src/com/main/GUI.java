@@ -1,11 +1,10 @@
 package com.main;
 
-//Import Library
-import com.googlemaps.Circle;
-import com.googlemaps.JavaScript;
+import com.API.googlemaps.Circle;
+import com.API.googlemaps.JavaScript;
+import com.parser.XMLParser;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
-import com.xmlparser.XMLParser;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -21,7 +20,7 @@ public class GUI extends JFrame {
 	public static final int MIN_ZOOM = 0;
 	public static final int MAX_ZOOM = 21;
 	private static int zoomValue = 4;
-	private static String xmlSource = "src\\Data\\PrixCarburants_quotidien_20151210.xml";
+	private static String xmlSource = "src\\Data\\XML\\PrixCarburants_quotidien_20151210.xml";
 	private JFrame frame;
 	static String workingDir = System.getProperty("user.dir");
 
@@ -57,7 +56,7 @@ public class GUI extends JFrame {
 
 		// JFRAME
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		JFrame frame = new JFrame("map.html");
+		JFrame frame = new JFrame("EcoPompe");
 		frame.getContentPane().setBackground(Color.BLACK);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -277,7 +276,7 @@ public class GUI extends JFrame {
 		panel_haut.add(panel, gbc_panel);
 
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(GUI.class.getResource("/Images/Logo4.png")));
+		lblNewLabel.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/Images/Logo4.png")));
 		panel.add(lblNewLabel);
 
 		JPanel panel_1 = new JPanel();
@@ -368,7 +367,7 @@ public class GUI extends JFrame {
 		frame.setVisible(true);
 
 		// Import de la carte de la page HTML (du serveur?) sur le browser
-		browser.loadURL(workingDir + "\\src\\Data\\map.html");
+		browser.loadURL(workingDir + "\\src\\Data\\HTML\\map.html");
 	}
 
 }
