@@ -6,8 +6,11 @@ import com.parser.XMLParser;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.UIManager.*;
@@ -20,8 +23,10 @@ public class GUI extends JFrame {
 	public static final int MIN_ZOOM = 0;
 	public static final int MAX_ZOOM = 21;
 	private static int zoomValue = 4;
-	private static String xmlSource = "src\\Data\\XML\\PrixCarburants_quotidien_20151210.xml";
-	private JFrame frame;
+	//public static List<String[]> ListeStations;
+	
+	
+	//private static String xmlSource = "src\\Data\\XML\\PrixCarburants_quotidien_20151210.xml";
 	static String workingDir = System.getProperty("user.dir");
 
 	/** Launch the application. */
@@ -35,8 +40,9 @@ public class GUI extends JFrame {
 							break;
 						}
 					}
-					GUI window = new GUI();
-					window.frame.setVisible(true);
+					new GUI();
+					//GUI window = new GUI();
+					//window.frame.setVisible(true);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,6 +60,7 @@ public class GUI extends JFrame {
 	private void initialize() {
 		final Browser browser = new Browser();
 		BrowserView browserView = new BrowserView(browser);
+		List<String[]> ListeStations = new ArrayList<String[]>(); //Liste des stations utilisée par le btnListeStation		
 		
 		// JFRAME
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +142,7 @@ public class GUI extends JFrame {
 		final int MIN = 0;
 		final int MAX = 100;
 		final int INIT = 30; // initial frames per second
-		JSlider slider = new JSlider(SwingConstants.HORIZONTAL, MIN, 100, INIT);
+		JSlider slider = new JSlider(SwingConstants.HORIZONTAL, MIN, MAX, INIT);
 		slider.setPaintLabels(true);
 		slider.setFont(new Font("Tahoma", Font.BOLD, 12));
 		slider.setMajorTickSpacing(20);
@@ -151,7 +158,7 @@ public class GUI extends JFrame {
 				lblRadius.setText("Rayon : " + Integer.toString(slider.getValue()) + " km");
 				new Circle(browser, txtLAT, txtLONG, slider);
 				// Generation des Markers des stations
-				XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider);
+				XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider, ListeStations);
 			}
 		});
 		// Event Mouse Wheel on SLIDER
@@ -228,12 +235,13 @@ public class GUI extends JFrame {
 		setMarkerButton.setForeground(new Color(138, 202, 206));
 		setMarkerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					// Suppression des anciennes stations eventuelles
-					JavaScript.deleteStations(browser);
-					// Generation des Markers des stations
-					XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider);
-				} catch (Exception ex) {
+				try 
+				{
+					JavaScript.deleteStations(browser);	// Suppression des anciennes stations eventuelles
+					XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider, ListeStations); // Generation des Markers des stations
+				} 
+				catch (Exception ex) 
+				{
 					System.out.println("Execption " + ex.getMessage());
 				}
 			}
@@ -251,8 +259,8 @@ public class GUI extends JFrame {
 		btnDeleteStations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					JavaScript.deleteStations(browser); // suppression des
-														// points Stations
+					ListeStations.clear();
+					JavaScript.deleteStations(browser); // suppression des points Stations
 				} catch (Exception ex) {
 					System.out.println("Execption " + ex.getMessage());
 				}
@@ -339,22 +347,36 @@ public class GUI extends JFrame {
 		gbc_btnCarte.gridy = 1;
 		panel_1.add(btnCarte, gbc_btnCarte);
 
-		JButton btnListePompe = new JButton("Liste des Stations");
-		btnListePompe.setBackground(new Color(39, 39, 39));
-		btnListePompe.setForeground(new Color(138, 202, 206));
-		btnListePompe.setFont(new Font("Tahoma", Font.PLAIN, 36));
-		btnListePompe.setPreferredSize(new Dimension(200, 40));
-		btnListePompe.addActionListener(new ActionListener() {
+		JButton btnListeStations = new JButton("Liste des Stations");
+		btnListeStations.setBackground(new Color(39, 39, 39));
+		btnListeStations.setForeground(new Color(138, 202, 206));
+		btnListeStations.setFont(new Font("Tahoma", Font.PLAIN, 36));
+		btnListeStations.setPreferredSize(new Dimension(200, 40));
+		btnListeStations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Affichage du panneau Liste des Stations
 				myCardLayout.show(myCards, "Liste_Stations");
+				// Recuperation des données du tableau listeStations issues de l'import du fichier xml-csv ou db (pour l'instant issue de la fonction XMLParser )
+				if (ListeStations.size() > 0) {
+					System.out.println(ListeStations.size());
+					int index = 0;
+					for (String[] station : ListeStations) {
+						System.out.println("-> N° "+ ++index + " | Station ID : " + station[0] + " | Adresse : " + station[1] + " | Code Postal : "+station[2] + " | Ville : " + station[3] + " | Lat : " + station[4] + " | Long : " + station[5]);
+					}
+					System.out.println(">>> End of process [OK]");
+				}
+				else 
+				{
+					System.out.println(">>> La liste des staions est vide !!!");
+				}
 			}
 		});
-		GridBagConstraints gbc_btnListePompe = new GridBagConstraints();
-		gbc_btnListePompe.fill = GridBagConstraints.BOTH;
-		gbc_btnListePompe.insets = new Insets(0, 0, 5, 5);
-		gbc_btnListePompe.gridx = 3;
-		gbc_btnListePompe.gridy = 1;
-		panel_1.add(btnListePompe, gbc_btnListePompe);
+		GridBagConstraints gbc_btnListeStations = new GridBagConstraints();
+		gbc_btnListeStations.fill = GridBagConstraints.BOTH;
+		gbc_btnListeStations.insets = new Insets(0, 0, 5, 5);
+		gbc_btnListeStations.gridx = 3;
+		gbc_btnListeStations.gridy = 1;
+		panel_1.add(btnListeStations, gbc_btnListeStations);
 
 		JButton btnInfos = new JButton("Informations");
 		btnInfos.setBackground(new Color(39, 39, 39));
