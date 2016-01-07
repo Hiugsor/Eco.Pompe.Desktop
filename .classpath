@@ -24,7 +24,5 @@
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/JxBrowser 6/license.jar"/>
 	<classpathentry kind="lib" path="lib/jdbc/com.mysql.jdbc_5.1.5.jar"/>
-	<classpathentry kind="lib" path="lib/JxBrowser 6/jxbrowser-6.0.jar"/>
-	<classpathentry kind="lib" path="lib/JxBrowser 6/jxbrowser-win-6.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
