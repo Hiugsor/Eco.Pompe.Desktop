@@ -27,38 +27,46 @@ public class XMLParser {
 
 	/**
 	 * Methode d"analyse d'un fichier CSV
+	 * 
 	 * @param browser
 	 */
-	public static void GenerateStationFromCSV(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider) {
+	public static void GenerateStationFromCSV(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider,
+			List<String[]> ListeStations) {
 		// >>> Déclarations
 		CsvFileRead csvFile;
 		List<String[]> lines;
 		int counter = 0;
+		ListeStations.clear();
 
 		try {
 			// >>> Lecture du Fichier csv
 			csvFile = new CsvFileRead(new File(workingDir + "\\src\\Data\\XML\\PrixCarburants_quotidien_20151214.csv"));
 			lines = csvFile.getData();
 
-			for (String[] column : lines) {				
-				// >>> Contrôles des données 1/3 - Vérification Si CodePostal Vide
+			for (String[] column : lines) {
+				// >>> Contrôles des données 1/4 - Vérification Si CodePostal Vide
 				if (column[3].length() == 0) {
 					column[3] = "0";
-					/*newLogFile.write("CP Vide," + column[0] + "," + column[1] + "," + column[2] + "," + column[4] + ","	+ column[3] + "," + column[5] + "\n");*/
 				}
-				int cp = Integer.parseInt(column[3]);
-				// >>> Contrôles des données 2/3 - Vérification de valeurs vides sur les latitudes & les longitudes
+				//int cp = Integer.parseInt(column[3]);
+
+				// >>> Contrôles des données 2/4 - Vérification de valeurs vides sur les latitudes & les longitudes
 				if (column[1].length() == 0 && column[2].length() != 0) {
 					column[1] = "0";
 				} else if (column[2].length() == 0 && column[1].length() != 0) {
 					column[2] = "0";
 				} else if (column[1].length() == 0 && column[2].length() == 0) {
-					column[1] = column[2] = "0";					
+					column[1] = column[2] = "0";
 				}
 
-				// >>> Contrôles des données 3/3 - Vérification d'inversion des lat-long dans le fichier csv
+				// >>> Contrôles des données 3/4 - Suppression du premier espace dans l'adresse.
+				if (column[4].substring(0, 1).contains(" ")) {
+					column[4] = column[4].substring(1, (column[4].length()));
+				}
+
+				// >>> Contrôles des données 4/4 - Vérification d'inversion des lat-long dans le fichier csv
 				double lat = Double.parseDouble(column[1]) / 100000;
-				double lng = Double.parseDouble(column[2]) / 100000;				
+				double lng = Double.parseDouble(column[2]) / 100000;
 				if ((lat < lng)) {
 					if (longMin <= lat && lat <= longMax && latMin <= lng && lng <= latMax) {
 						lat = Double.parseDouble(column[2]) / 100000;
@@ -68,21 +76,27 @@ public class XMLParser {
 
 				// >>> Création des Markers sous conditions d'être dans les limites géographiques de la france et corse
 				if (latMin <= lat && lat <= latMax && longMin <= lng && lng <= longMax) {
-					double distance = GeoProcessing.distance(Double.parseDouble(txtLat.getText()), Double.parseDouble(txtLong.getText()), lat, lng);
+					double distance = GeoProcessing.distance(Double.parseDouble(txtLat.getText()),
+							Double.parseDouble(txtLong.getText()), lat, lng);
 					if (distance <= slider.getValue()) {
-						new Marker(browser, lat, lng, column[0], column[4], column[3], column[5]); //création du marker
+						// création du marker
+						new Marker(browser, lat, lng, column[0], column[4], column[3], column[5]);
+						 // Creation d'un tableau des infos station
+						String[] station = new String[] { column[0], column[4], column[3], column[5],
+								Double.toString(lat), Double.toString(lng) };
+						// Ajout du tableau dans la liste des Stations
+						ListeStations.add(station); 
 						counter++;
 					}
 				}
-			}		
-			System.out.println(">>> Job Done ! with " + counter + " stations imported. []");
-		}
-		catch (Exception e) {
-			System.out.println(">>> Execption " + /*e.getMessage()) +*/ e.getStackTrace());
+			}
+			System.out.println(">>> Nb de Stations inserées dans la ListeStations : " + ListeStations.size());
+			System.out.println(">>> Job Done ! with " + counter + " stations imported. [Good]");
+		} catch (Exception e) {
+			System.out.println(">>> Execption " + /* e.getMessage()) + */ e.getStackTrace());
 		}
 	}
 
-	
 	/**
 	 * Methode d"analyse d'un fichier XML [à retravailler en focntion du code de
 	 * traitement de la methode GenerateStationFromCSV()]
@@ -92,7 +106,7 @@ public class XMLParser {
 	public static void GenerateStationFromXML(Browser browser) {
 		try {
 			int counter = 0; // Compteur des Markers
-			
+
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dombuilder = factory.newDocumentBuilder();
 			org.w3c.dom.Document w3cDocument = dombuilder.parse(xmlSource);
@@ -120,8 +134,7 @@ public class XMLParser {
 			System.out.println(counter);
 		} catch (Exception e) {
 			System.out.println("Execption " + e.getMessage());
-	
-			
+
 		}
 		System.out.println("Done!");
 
