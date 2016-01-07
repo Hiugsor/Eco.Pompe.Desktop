@@ -182,8 +182,8 @@ public class GUI extends JFrame {
 		navigationBar.add(slider, gbc_slider);
 
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Btn Point de départ
-		JButton btnPosDep = new JButton("Position de Départ");
+		// Btn Point de dï¿½part
+		JButton btnPosDep = new JButton("Position de Dï¿½part");
 		btnPosDep.setBackground(new Color(39, 39, 39));
 		btnPosDep.setForeground(new Color(138, 202, 206));
 		btnPosDep.addActionListener(new ActionListener() {
@@ -216,7 +216,7 @@ public class GUI extends JFrame {
 		gbc_btnRayon.gridy = 8;
 		navigationBar.add(btnRayon, gbc_btnRayon);
 
-		// Création du POI (point of interest)
+		// Crï¿½ation du POI (point of interest)
 		JButton setMarkerButton = new JButton("Generate Stations");
 		GridBagConstraints gbc_setMarkerButton = new GridBagConstraints();
 		gbc_setMarkerButton.fill = GridBagConstraints.BOTH;
@@ -291,12 +291,6 @@ public class GUI extends JFrame {
 		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 0;
 		panel_haut.add(panel_1, gbc_panel_1);
-		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[] { 15, 365, 0, 365, 0, 365, 15, 0 };
-		gbl_panel_1.rowHeights = new int[] { 55, 78, 26, 0 };
-		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
-		panel_1.setLayout(gbl_panel_1);
 
 
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,69 +303,160 @@ public class GUI extends JFrame {
 		tabCarte.add(browserView, BorderLayout.CENTER);		
 		myCards.add("Carte", tabCarte);
 		
+		
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//LISTE////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		JPanel tabListe = new JPanel();
-		tabListe.setBackground(Color.GREEN); //Couleur de test visuel - à supprimer plus tard
+		tabListe.setBackground(Color.BLACK); //Couleur de test visuel - ï¿½ supprimer plus tard
 		//tabListe.setBackground(new Color(39, 39, 39));		
 		myCards.add("Liste_Stations", tabListe);
+		GridBagLayout gbl_tabListe = new GridBagLayout();
+		gbl_tabListe.columnWidths = new int[]{0, 945, 0, 0};
+		gbl_tabListe.rowHeights = new int[]{0, 177, 0, 46, 0, 46, 0};
+		gbl_tabListe.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_tabListe.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+		tabListe.setLayout(gbl_tabListe);
+		
+		JPanel blocBox = new JPanel();
+		blocBox.setBackground(Color.BLACK);
+		GridBagConstraints gbc_blocBox = new GridBagConstraints();
+		gbc_blocBox.insets = new Insets(0, 0, 5, 5);
+		gbc_blocBox.fill = GridBagConstraints.BOTH;
+		gbc_blocBox.gridx = 1;
+		gbc_blocBox.gridy = 1;
+		tabListe.add(blocBox, gbc_blocBox);
+		blocBox.setLayout(new BorderLayout(0, 0));
+		
+		JLabel top = new JLabel("");
+		top.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/NorthFrameBox.png")));
+		blocBox.add(top, BorderLayout.NORTH);
+		
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/SouthFrameBox.png")));
+		blocBox.add(label, BorderLayout.SOUTH);
+		
+		JLabel label_1 = new JLabel("");
+		label_1.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/WestFrameBox.png")));
+		blocBox.add(label_1, BorderLayout.WEST);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/EastFrameBox.png")));
+		blocBox.add(lblNewLabel_1, BorderLayout.EAST);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(Color.BLACK);
+		blocBox.add(panel_3, BorderLayout.CENTER);
+		GridBagLayout gbl_panel_3 = new GridBagLayout();
+		gbl_panel_3.columnWidths = new int[]{79, 131, 485, 244, 0};
+		gbl_panel_3.rowHeights = new int[]{120, 0};
+		gbl_panel_3.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_3.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		panel_3.setLayout(gbl_panel_3);
+		
+		JLabel distance = new JLabel("< 500m");
+		distance.setForeground(Color.GRAY);
+		distance.setFont(new Font("Tahoma", Font.BOLD, 20));
+		GridBagConstraints gbc_distance = new GridBagConstraints();
+		gbc_distance.insets = new Insets(0, 0, 0, 5);
+		gbc_distance.gridx = 0;
+		gbc_distance.gridy = 0;
+		panel_3.add(distance, gbc_distance);
+		
+		JLabel logo = new JLabel("");
+		logo.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/Agip_logomini.png")));
+		GridBagConstraints gbc_logo = new GridBagConstraints();
+		gbc_logo.insets = new Insets(0, 0, 0, 5);
+		gbc_logo.gridx = 1;
+		gbc_logo.gridy = 0;
+		panel_3.add(logo, gbc_logo);
+		
+		JLabel info = new JLabel("Station-Service AGIP \r\n544 Rue Paul Rimbaud \r\n04.67.63.08.18 ");
+		info.setForeground(Color.GRAY);
+		info.setFont(new Font("Tahoma", Font.BOLD, 14));
+		GridBagConstraints gbc_info = new GridBagConstraints();
+		gbc_info.insets = new Insets(0, 0, 0, 5);
+		gbc_info.gridx = 2;
+		gbc_info.gridy = 0;
+		panel_3.add(info, gbc_info);
+		
+		JLabel prix = new JLabel("1.33 â‚¬");
+		prix.setForeground(Color.WHITE);
+		prix.setFont(new Font("Tahoma", Font.PLAIN, 28));
+		GridBagConstraints gbc_prix = new GridBagConstraints();
+		gbc_prix.gridx = 3;
+		gbc_prix.gridy = 0;
+		panel_3.add(prix, gbc_prix);
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		////STATISTIQUE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		JPanel tabStat = new JPanel();
-		tabStat.setBackground(Color.BLUE);  //Couleur de test visuel - à supprimer plus tard
+		tabStat.setBackground(Color.BLUE);  //Couleur de test visuel - ï¿½ supprimer plus tard
 		//tabStat.setBackground(new Color(39, 39, 39));
 		myCards.add("Statistiques", tabStat);
 		
 		CardLayout myCardLayout = (CardLayout)(myCards.getLayout());
+		GridBagLayout gbl_panel_1 = new GridBagLayout();
+		gbl_panel_1.columnWidths = new int[]{30, 386, 35, 386, 35, 386, 0};
+		gbl_panel_1.rowHeights = new int[]{55, 73, 0};
+		gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		panel_1.setLayout(gbl_panel_1);
 		
-		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
-		JButton btnCarte = new JButton("Carte");
-		btnCarte.setBackground(new Color(39, 39, 39));
-		btnCarte.setForeground(new Color(138, 202, 206));
-		btnCarte.setFont(new Font("Tahoma", Font.PLAIN, 36));
-		btnCarte.setPreferredSize(new Dimension(200, 40));
-		btnCarte.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				myCardLayout.show(myCards, "Carte");
-			}
-		});
-		GridBagConstraints gbc_btnCarte = new GridBagConstraints();
-		gbc_btnCarte.fill = GridBagConstraints.BOTH;
-		gbc_btnCarte.insets = new Insets(0, 0, 5, 5);
-		gbc_btnCarte.gridx = 1;
-		gbc_btnCarte.gridy = 1;
-		panel_1.add(btnCarte, gbc_btnCarte);
-
-		JButton btnListePompe = new JButton("Liste des Stations");
-		btnListePompe.setBackground(new Color(39, 39, 39));
-		btnListePompe.setForeground(new Color(138, 202, 206));
-		btnListePompe.setFont(new Font("Tahoma", Font.PLAIN, 36));
-		btnListePompe.setPreferredSize(new Dimension(200, 40));
-		btnListePompe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				myCardLayout.show(myCards, "Liste_Stations");
-			}
-		});
-		GridBagConstraints gbc_btnListePompe = new GridBagConstraints();
-		gbc_btnListePompe.fill = GridBagConstraints.BOTH;
-		gbc_btnListePompe.insets = new Insets(0, 0, 5, 5);
-		gbc_btnListePompe.gridx = 3;
-		gbc_btnListePompe.gridy = 1;
-		panel_1.add(btnListePompe, gbc_btnListePompe);
-
-		JButton btnInfos = new JButton("Informations");
-		btnInfos.setBackground(new Color(39, 39, 39));
-		btnInfos.setForeground(new Color(138, 202, 206));
-		btnInfos.setFont(new Font("Tahoma", Font.PLAIN, 36));
-		btnInfos.setPreferredSize(new Dimension(200, 40));
-		btnInfos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				myCardLayout.show(myCards, "Statistiques");
-			}
-		});
-		GridBagConstraints gbc_btnInfos = new GridBagConstraints();
-		gbc_btnInfos.fill = GridBagConstraints.BOTH;
-		gbc_btnInfos.insets = new Insets(0, 0, 5, 5);
-		gbc_btnInfos.gridx = 5;
-		gbc_btnInfos.gridy = 1;
-		panel_1.add(btnInfos, gbc_btnInfos);
+				JButton btnListePompe = new JButton("Liste des Stations");
+				btnListePompe.setBackground(new Color(39, 39, 39));
+				btnListePompe.setForeground(new Color(138, 202, 206));
+				btnListePompe.setFont(new Font("Tahoma", Font.PLAIN, 36));
+				btnListePompe.setPreferredSize(new Dimension(200, 40));
+				btnListePompe.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						myCardLayout.show(myCards, "Liste_Stations");
+					}
+				});
+				
+				// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+				JButton btnCarte = new JButton("Carte");
+				btnCarte.setBackground(new Color(39, 39, 39));
+				btnCarte.setForeground(new Color(138, 202, 206));
+				btnCarte.setFont(new Font("Tahoma", Font.PLAIN, 36));
+				btnCarte.setPreferredSize(new Dimension(200, 40));
+				btnCarte.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						myCardLayout.show(myCards, "Carte");
+					}
+				});
+				GridBagConstraints gbc_btnCarte = new GridBagConstraints();
+				gbc_btnCarte.fill = GridBagConstraints.BOTH;
+				gbc_btnCarte.insets = new Insets(0, 0, 0, 5);
+				gbc_btnCarte.gridx = 1;
+				gbc_btnCarte.gridy = 1;
+				panel_1.add(btnCarte, gbc_btnCarte);
+				GridBagConstraints gbc_btnListePompe = new GridBagConstraints();
+				gbc_btnListePompe.fill = GridBagConstraints.BOTH;
+				gbc_btnListePompe.insets = new Insets(0, 0, 0, 5);
+				gbc_btnListePompe.gridx = 3;
+				gbc_btnListePompe.gridy = 1;
+				panel_1.add(btnListePompe, gbc_btnListePompe);
+		
+				JButton btnInfos = new JButton("Informations");
+				btnInfos.setBackground(new Color(39, 39, 39));
+				btnInfos.setForeground(new Color(138, 202, 206));
+				btnInfos.setFont(new Font("Tahoma", Font.PLAIN, 36));
+				btnInfos.setPreferredSize(new Dimension(200, 40));
+				btnInfos.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						myCardLayout.show(myCards, "Statistiques");
+					}
+				});
+				GridBagConstraints gbc_btnInfos = new GridBagConstraints();
+				gbc_btnInfos.fill = GridBagConstraints.BOTH;
+				gbc_btnInfos.gridx = 5;
+				gbc_btnInfos.gridy = 1;
+				panel_1.add(btnInfos, gbc_btnInfos);
 
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JButtons du ruban Jpanel toolbar en bas
