@@ -80,7 +80,7 @@ public class FrameStation
 		gbc_info.gridy = 0;
 		panel_3.add(info, gbc_info);
 		
-		JLabel prix = new JLabel("1.33 €");
+		JLabel prix = new JLabel("1.33 euros");
 		prix.setForeground(Color.WHITE);
 		prix.setFont(new Font("Tahoma", Font.PLAIN, 28));
 		GridBagConstraints gbc_prix = new GridBagConstraints();
