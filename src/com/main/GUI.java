@@ -339,8 +339,8 @@ public class GUI extends JFrame {
 
 		//myCards.add("Liste_Stations", tabListe);
 		GridBagLayout gbl_tabListe = new GridBagLayout();
-		gbl_tabListe.columnWidths = new int[]{15, 945, 0, 0};
-		gbl_tabListe.rowHeights = new int[]{15, 177, 0, 46, 0, 46, 0};
+		gbl_tabListe.columnWidths = new int[]{25, 945, 0, 0};
+		gbl_tabListe.rowHeights = new int[]{25, 177, 0, 46, 0, 46, 0};
 		gbl_tabListe.columnWeights = new double[]{0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_tabListe.rowWeights = new double[]{0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
 		tabListe.setLayout(gbl_tabListe);
