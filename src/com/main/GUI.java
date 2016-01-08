@@ -2,6 +2,7 @@ package com.main;
 
 import com.API.googlemaps.Circle;
 import com.API.googlemaps.JavaScript;
+import com.GUI.InsertStationFrame;
 import com.parser.XMLParser;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
@@ -329,19 +330,37 @@ public class GUI extends JFrame {
 		
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FENETRE LISTE DES STATIONS
+		
 		JPanel tabListe = new JPanel();
+		JScrollPane scrb = new JScrollPane(tabListe);
 		tabListe.setBackground(Color.BLACK); //Couleur de test visuel - ï¿½ supprimer plus tard
-		//tabListe.setBackground(new Color(39, 39, 39));		
-		myCards.add("Liste_Stations", tabListe);
+		//tabListe.setBackground(new Color(39, 39, 39));
+		myCards.add("Liste_Stations", scrb);
+
+		//myCards.add("Liste_Stations", tabListe);
 		GridBagLayout gbl_tabListe = new GridBagLayout();
-		gbl_tabListe.columnWidths = new int[]{0, 945, 0, 0};
-		gbl_tabListe.rowHeights = new int[]{0, 177, 0, 46, 0, 46, 0};
+		gbl_tabListe.columnWidths = new int[]{15, 945, 0, 0};
+		gbl_tabListe.rowHeights = new int[]{15, 177, 0, 46, 0, 46, 0};
 		gbl_tabListe.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_tabListe.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
 		tabListe.setLayout(gbl_tabListe);
 		
 		
-		//Frame Station 
+		/*JPanel tabListe = new JPanel();
+		tabListe.setBackground(Color.BLACK); //Couleur de test visuel - ï¿½ supprimer plus tard
+		//tabListe.setBackground(new Color(39, 39, 39));		
+		myCards.add("Liste_Stations", tabListe);
+		GridBagLayout gbl_tabListe = new GridBagLayout();
+		gbl_tabListe.columnWidths = new int[]{15, 945, 0, 0};
+		gbl_tabListe.rowHeights = new int[]{15, 177, 0, 46, 0, 46, 0};
+		gbl_tabListe.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_tabListe.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+		tabListe.setLayout(gbl_tabListe);*/
+		
+		
+		
+		
+		/*//Frame Station 
 		JPanel blocBox = new JPanel();
 		blocBox.setBackground(Color.BLACK);
 		GridBagConstraints gbc_blocBox = new GridBagConstraints();
@@ -411,7 +430,7 @@ public class GUI extends JFrame {
 		gbc_prix.gridx = 3;
 		gbc_prix.gridy = 0;
 		panel_3.add(prix, gbc_prix);		
-		// Fin Frame Station
+		// Fin Frame Station*/
 				
 		
 		// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -464,6 +483,14 @@ public class GUI extends JFrame {
 						System.out.println("-> N° "+ ++index + " | Station ID : " + station[0] + " | Adresse : " + station[1] + " | Code Postal : "+station[2] + " | Ville : " + station[3] + " | Lat : " + station[4] + " | Long : " + station[5]);
 					}
 					System.out.println(">>> End of process [OK]");
+					
+					int indexTabList = 0;
+					for (int i = 0; i < ListeStations.size(); i++) {
+						new InsertStationFrame(tabListe, indexTabList );
+						indexTabList++;
+					}
+					
+					
 				}
 				else 
 				{
