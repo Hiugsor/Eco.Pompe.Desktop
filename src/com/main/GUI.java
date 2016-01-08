@@ -61,7 +61,7 @@ public class GUI extends JFrame {
 	private void initialize() {
 		final Browser browser = new Browser();
 		BrowserView browserView = new BrowserView(browser);
-		List<String[]> ListeStations = new ArrayList<String[]>(); //Liste des stations utilisée par le btnListeStation		
+		List<String[]> ListeStations = new ArrayList<String[]>(); //Liste des stations utilisï¿½e par le btnListeStation		
 		
 		
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -339,11 +339,20 @@ public class GUI extends JFrame {
 
 		//myCards.add("Liste_Stations", tabListe);
 		GridBagLayout gbl_tabListe = new GridBagLayout();
-		gbl_tabListe.columnWidths = new int[]{15, 945, 0, 0};
-		gbl_tabListe.rowHeights = new int[]{15, 177, 0, 46, 0, 46, 0};
-		gbl_tabListe.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_tabListe.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_tabListe.columnWidths = new int[]{25, 945, 0, 0};
+		gbl_tabListe.rowHeights = new int[]{25, 177, 0, 46, 0, 46, 0};
+		gbl_tabListe.columnWeights = new double[]{0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_tabListe.rowWeights = new double[]{0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
 		tabListe.setLayout(gbl_tabListe);
+		
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/espace.png")));
+		label.setBackground(Color.BLACK);
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.insets = new Insets(0, 0, 5, 5);
+		gbc_label.gridx = 1;
+		gbc_label.gridy = 0;
+		tabListe.add(label, gbc_label);
 		
 		
 		/*JPanel tabListe = new JPanel();
@@ -475,16 +484,16 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//Affichage du panneau Liste des Stations
 				myCardLayout.show(myCards, "Liste_Stations");
-				// Recuperation des données du tableau listeStations issues de l'import du fichier xml-csv ou db (pour l'instant issue de la fonction XMLParser )
+				// Recuperation des donnï¿½es du tableau listeStations issues de l'import du fichier xml-csv ou db (pour l'instant issue de la fonction XMLParser )
 				if (ListeStations.size() > 0) {
 					System.out.println(ListeStations.size());
 					int index = 0;
 					for (String[] station : ListeStations) {
-						System.out.println("-> N° "+ ++index + " | Station ID : " + station[0] + " | Adresse : " + station[1] + " | Code Postal : "+station[2] + " | Ville : " + station[3] + " | Lat : " + station[4] + " | Long : " + station[5]);
+						System.out.println("-> Nï¿½ "+ ++index + " | Station ID : " + station[0] + " | Adresse : " + station[1] + " | Code Postal : "+station[2] + " | Ville : " + station[3] + " | Lat : " + station[4] + " | Long : " + station[5]);
 					}
 					System.out.println(">>> End of process [OK]");
 					
-					int indexTabList = 0;
+					int indexTabList = 1;
 					for (int i = 0; i < ListeStations.size(); i++) {
 						new InsertStationFrame(tabListe, indexTabList );
 						indexTabList++;
