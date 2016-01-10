@@ -2,8 +2,9 @@ package com.main;
 
 import com.API.googlemaps.Circle;
 import com.API.googlemaps.JavaScript;
-import com.GUI.InsertStationFrame;
+import com.GUI.FrameStation;
 import com.parser.XMLParser;
+import com.processing.GeoProcessing;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
@@ -61,7 +62,9 @@ public class GUI extends JFrame {
 	private void initialize() {
 		final Browser browser = new Browser();
 		BrowserView browserView = new BrowserView(browser);
-		List<String[]> ListeStations = new ArrayList<String[]>(); //Liste des stations utilisï¿½e par le btnListeStation		
+		List<String[]> ListeStations = new ArrayList<String[]>(); //Liste des stations utilisï¿½e par le btnListeStation
+		JPanel tabListe = new JPanel();
+		
 		
 		
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -265,6 +268,8 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					ListeStations.clear();
+					tabListe.removeAll();
+					tabListe.repaint();
 					JavaScript.deleteStations(browser); // suppression des points Stations
 				} catch (Exception ex) {
 					System.out.println("Execption " + ex.getMessage());
@@ -331,8 +336,9 @@ public class GUI extends JFrame {
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FENETRE LISTE DES STATIONS
 		
-		JPanel tabListe = new JPanel();
+		
 		JScrollPane scrb = new JScrollPane(tabListe);
+		scrb.setBorder(null);
 		tabListe.setBackground(Color.BLACK); //Couleur de test visuel - ï¿½ supprimer plus tard
 		//tabListe.setBackground(new Color(39, 39, 39));
 		myCards.add("Liste_Stations", scrb);
@@ -354,93 +360,7 @@ public class GUI extends JFrame {
 		gbc_label.gridy = 0;
 		tabListe.add(label, gbc_label);
 		
-		
-		/*JPanel tabListe = new JPanel();
-		tabListe.setBackground(Color.BLACK); //Couleur de test visuel - ï¿½ supprimer plus tard
-		//tabListe.setBackground(new Color(39, 39, 39));		
-		myCards.add("Liste_Stations", tabListe);
-		GridBagLayout gbl_tabListe = new GridBagLayout();
-		gbl_tabListe.columnWidths = new int[]{15, 945, 0, 0};
-		gbl_tabListe.rowHeights = new int[]{15, 177, 0, 46, 0, 46, 0};
-		gbl_tabListe.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_tabListe.rowWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
-		tabListe.setLayout(gbl_tabListe);*/
-		
-		
-		
-		
-		/*//Frame Station 
-		JPanel blocBox = new JPanel();
-		blocBox.setBackground(Color.BLACK);
-		GridBagConstraints gbc_blocBox = new GridBagConstraints();
-		gbc_blocBox.insets = new Insets(0, 0, 5, 5);
-		gbc_blocBox.fill = GridBagConstraints.BOTH;
-		gbc_blocBox.gridx = 1;
-		gbc_blocBox.gridy = 1;
-		tabListe.add(blocBox, gbc_blocBox);
-		blocBox.setLayout(new BorderLayout(0, 0));
-		
-		JLabel top = new JLabel("");
-		top.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/NorthFrameBox.png")));
-		blocBox.add(top, BorderLayout.NORTH);
-		
-		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/SouthFrameBox.png")));
-		blocBox.add(label, BorderLayout.SOUTH);
-		
-		JLabel label_1 = new JLabel("");
-		label_1.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/WestFrameBox.png")));
-		blocBox.add(label_1, BorderLayout.WEST);
-		
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/EastFrameBox.png")));
-		blocBox.add(lblNewLabel_1, BorderLayout.EAST);
-		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(Color.BLACK);
-		blocBox.add(panel_3, BorderLayout.CENTER);
-		GridBagLayout gbl_panel_3 = new GridBagLayout();
-		gbl_panel_3.columnWidths = new int[]{79, 131, 485, 244, 0};
-		gbl_panel_3.rowHeights = new int[]{120, 0};
-		gbl_panel_3.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_3.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-		panel_3.setLayout(gbl_panel_3);
-		
-		JLabel distance = new JLabel("< 500m");
-		distance.setForeground(Color.GRAY);
-		distance.setFont(new Font("Tahoma", Font.BOLD, 20));
-		GridBagConstraints gbc_distance = new GridBagConstraints();
-		gbc_distance.insets = new Insets(0, 0, 0, 5);
-		gbc_distance.gridx = 0;
-		gbc_distance.gridy = 0;
-		panel_3.add(distance, gbc_distance);
-		
-		JLabel logo = new JLabel("");
-		logo.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/Agip_logomini.png")));
-		GridBagConstraints gbc_logo = new GridBagConstraints();
-		gbc_logo.insets = new Insets(0, 0, 0, 5);
-		gbc_logo.gridx = 1;
-		gbc_logo.gridy = 0;
-		panel_3.add(logo, gbc_logo);
-		
-		JLabel info = new JLabel("Station-Service AGIP \r\n544 Rue Paul Rimbaud \r\n04.67.63.08.18 ");
-		info.setForeground(Color.GRAY);
-		info.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_info = new GridBagConstraints();
-		gbc_info.insets = new Insets(0, 0, 0, 5);
-		gbc_info.gridx = 2;
-		gbc_info.gridy = 0;
-		panel_3.add(info, gbc_info);
-		
-		JLabel prix = new JLabel("1.33 euros");
-		prix.setForeground(Color.WHITE);
-		prix.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		GridBagConstraints gbc_prix = new GridBagConstraints();
-		gbc_prix.gridx = 3;
-		gbc_prix.gridy = 0;
-		panel_3.add(prix, gbc_prix);		
-		// Fin Frame Station*/
-				
+						
 		
 		// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FENETRE STATISTIQUES
@@ -495,10 +415,9 @@ public class GUI extends JFrame {
 					
 					int indexTabList = 1;
 					for (int i = 0; i < ListeStations.size(); i++) {
-						new InsertStationFrame(tabListe, indexTabList );
+						new FrameStation(tabListe, indexTabList );
 						indexTabList++;
-					}
-					
+					}				
 					
 				}
 				else 
@@ -522,6 +441,21 @@ public class GUI extends JFrame {
 		btnInfos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				myCardLayout.show(myCards, "Statistiques");
+				
+				//Point de Depart
+				double P1lat = 43.610769;
+				double P1lng = 3.876622;												
+				
+				//Calcul des coordonnées d'un point par methode polaire 
+				com.processing.Point p2 = GeoProcessing.Polar(P1lat, P1lng, 30000, 0);
+				System.out.println("Lat>"+ p2.getLatitute());
+				System.out.println("Long>"+ p2.getLongitude());
+				
+				//verification
+				double dist = GeoProcessing.distance(P1lat, P1lng, p2.getLatitute(), p2.getLongitude());
+				System.out.println(">>> Verif Distance : " + dist);
+				float azm = GeoProcessing.azimuth(P1lat, P1lng, p2.getLatitute(), p2.getLongitude());
+				System.out.println(">>> Verif Azimuth : " + azm);
 			}
 		});
 		GridBagConstraints gbc_btnInfos = new GridBagConstraints();
