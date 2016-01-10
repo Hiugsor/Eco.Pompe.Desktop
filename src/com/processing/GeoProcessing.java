@@ -29,23 +29,12 @@ public class GeoProcessing {
 	    }
 	    return azm;
 	}
-	
-	public static Point CalculXYPolar(Double lat1, Double lng1, float distance, float azm)
-	{
-		double newLat = lat1 + distance * Math.cos(azm);
-		System.out.println(newLat);
-		double newLng = lng1 + distance * Math.sin(azm);
-		System.out.println(newLng);
-		Point p = new Point("Point Recherché", newLat, newLng);	
-		return p;
-	}
-	
 		
 	//Nota pour calculer le point du carré Nord-Ouest 
-	// dist = r.root(2) avec Azm @ 315°
+	// dist = r * Math.sqrt(2) avec Azm @ 315°
 	
 	//Nota pour calculer le point du carré Sud-Est 
-	// dist = r.root(2) avec Azm @ 135°
+	// dist = r.Math.sqrt(2) avec Azm @ 135°
 	
 	public static Point Polar(Double lat1, Double lng1, float distance, float azm)
 	{
@@ -63,7 +52,7 @@ public class GeoProcessing {
 		//Consersion Radian vers Degré
 		newLat = newLat * 180 / PI;
 		newLng = newLng * 180 / PI;
-		Point pt = new Point("Point Recherché", newLat, newLng);
+		Point pt = new Point("Point Calculé", newLat, newLng);
 		return pt;			
 	}
 	
