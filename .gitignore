@@ -218,3 +218,6 @@ pip-log.txt
 #CSV
 bin/Data/Positions_Errors.csv
 src/Data/Positions_Errors.csv
+
+#TempsBin
+bin/*

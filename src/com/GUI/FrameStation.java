@@ -10,13 +10,15 @@ import java.awt.Insets;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import com.main.GUI;
 
-public class FrameStation
-{
+public class FrameStation {
 
-	public FrameStation()
+	
+	
+	public FrameStation(JPanel  tabListe, int indexTabList )
 	{
 		JPanel blocBox = new JPanel();
 		blocBox.setBackground(Color.BLACK);
@@ -24,9 +26,9 @@ public class FrameStation
 		gbc_blocBox.insets = new Insets(0, 0, 5, 5);
 		gbc_blocBox.fill = GridBagConstraints.BOTH;
 		gbc_blocBox.gridx = 1;
-		gbc_blocBox.gridy = 1;
-		////penser a inclure ce JPanel dans le tabPan quand la classe est appelée.
+		gbc_blocBox.gridy = indexTabList;		
 		blocBox.setLayout(new BorderLayout(0, 0));
+		tabListe.add(blocBox, gbc_blocBox);
 		
 		JLabel top = new JLabel("");
 		top.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/NorthFrameBox.png")));
@@ -87,6 +89,6 @@ public class FrameStation
 		gbc_prix.gridx = 3;
 		gbc_prix.gridy = 0;
 		panel_3.add(prix, gbc_prix);
+		
 	}
-	
 }
