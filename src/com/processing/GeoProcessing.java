@@ -1,5 +1,5 @@
 package com.processing;
-import com.processing.*;
+
 
 public class GeoProcessing {
 
@@ -13,7 +13,7 @@ public class GeoProcessing {
 	//Methodes
 	public static double distance(Double lat1, Double lng1, Double lat2, Double lng2)
 	{
-		//convertion degres decimaux en radian		
+		//Conversion Degrés decimaux en radian		
 		lat1 = lat1 * PI / 180;
 		lng1 = lng1 * PI / 180;
 		lat2 = lat2 * PI / 180;
@@ -29,38 +29,26 @@ public class GeoProcessing {
 	    }
 	    return azm;
 	}
-	
-	public static Point CalculXYPolar(Double lat1, Double lng1, float distance, float azm)
-	{
-		double newLat = lat1 + distance * Math.cos(azm);
-		System.out.println(newLat);
-		double newLng = lng1 + distance * Math.sin(azm);
-		System.out.println(newLng);
-		Point p = new Point("Point Recherché", newLat, newLng);	
-		return p;
-	}
-	
-		
+			
 	//Nota pour calculer le point du carré Nord-Ouest 
-	// dist = r.root(2) avec Azm @ 315°
-	
+	// dist = r * Math.sqrt(2) avec Azm @ 315°	
 	//Nota pour calculer le point du carré Sud-Est 
-	// dist = r.root(2) avec Azm @ 135°
+	// dist = r * Math.sqrt(2) avec Azm @ 135°
 	
-	public static Point Polar(Double lat1, Double lng1, float distance, float azm)
+	public static Point Polar(Double latOrigine, Double longOrigine, float distance, float azm)
 	{
-		//Conversion Degré vers Radian
-		lat1 = lat1 * PI / 180;
-		lng1 = lng1 * PI / 180;		
+		//Conversion Degrés decimaux en radian	
+		latOrigine = latOrigine * PI / 180;
+		longOrigine = longOrigine * PI / 180;		
 		
-		//Calcul de la Distance Angulaire
+		//Calcul de la Distance Angulaire en metre
 		double angularDistance = distance/(EarthRadius*1000);	
 		
 		//Calcul Lat Long en Radian
-		double newLat = Math.asin(Math.sin(lat1) * Math.cos(angularDistance) + Math.cos(lat1) * Math.sin(angularDistance) * Math.cos(azm));
-		double newLng = lng1 + Math.atan2(Math.sin(azm) * Math.sin(angularDistance) * Math.cos(lat1), Math.cos(angularDistance) - Math.sin(lat1) * Math.sin(newLat));
+		double newLat = Math.asin(Math.sin(latOrigine) * Math.cos(angularDistance) + Math.cos(latOrigine) * Math.sin(angularDistance) * Math.cos(azm));
+		double newLng = longOrigine + Math.atan2(Math.sin(azm) * Math.sin(angularDistance) * Math.cos(latOrigine), Math.cos(angularDistance) - Math.sin(latOrigine) * Math.sin(newLat));
 		
-		//Consersion Radian vers Degré
+		//Consersion Radian vers Degrés dec
 		newLat = newLat * 180 / PI;
 		newLng = newLng * 180 / PI;
 		Point pt = new Point("Point Recherché", newLat, newLng);

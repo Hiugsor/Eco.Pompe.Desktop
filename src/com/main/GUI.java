@@ -413,12 +413,12 @@ public class GUI extends JFrame {
 					}
 					System.out.println(">>> End of process [OK]");
 					
+					//Creation des Stations dans la "Liste des Stations
 					int indexTabList = 1;
 					for (int i = 0; i < ListeStations.size(); i++) {
 						new FrameStation(tabListe, indexTabList );
 						indexTabList++;
-					}				
-					
+					}
 				}
 				else 
 				{
