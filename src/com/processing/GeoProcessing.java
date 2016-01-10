@@ -34,7 +34,7 @@ public class GeoProcessing {
 	// dist = r * Math.sqrt(2) avec Azm @ 315°
 	
 	//Nota pour calculer le point du carré Sud-Est 
-	// dist = r.Math.sqrt(2) avec Azm @ 135°
+	// dist = r * Math.sqrt(2) avec Azm @ 135°
 	
 	public static Point Polar(Double lat1, Double lng1, float distance, float azm)
 	{
