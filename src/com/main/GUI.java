@@ -5,6 +5,7 @@ import com.API.googlemaps.JavaScript;
 import com.GUI.FrameStation;
 import com.parser.XMLParser;
 import com.processing.GeoProcessing;
+import com.processing.Borders;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
@@ -64,8 +65,7 @@ public class GUI extends JFrame {
 		BrowserView browserView = new BrowserView(browser);
 		List<String[]> ListeStations = new ArrayList<String[]>(); //Liste des stations utilisï¿½e par le btnListeStation
 		JPanel tabListe = new JPanel();
-		
-		
+				
 		
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JFRAME
@@ -409,7 +409,7 @@ public class GUI extends JFrame {
 					System.out.println(ListeStations.size());
 					int index = 0;
 					for (String[] station : ListeStations) {
-						System.out.println("-> Nï¿½ "+ ++index + " | Station ID : " + station[0] + " | Adresse : " + station[1] + " | Code Postal : "+station[2] + " | Ville : " + station[3] + " | Lat : " + station[4] + " | Long : " + station[5]);
+						System.out.println("-> Num "+ ++index + " | Station ID : " + station[0] + " | Adresse : " + station[1] + " | Code Postal : "+station[2] + " | Ville : " + station[3] + " | Lat : " + station[4] + " | Long : " + station[5]);
 					}
 					System.out.println(">>> End of process [OK]");
 					
@@ -441,21 +441,41 @@ public class GUI extends JFrame {
 		btnInfos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				myCardLayout.show(myCards, "Statistiques");
-				
+				System.out.println("");
+								
+				// Test Temporaire de calcul de coordonnées géographique
 				//Point de Depart
-				double P1lat = 43.610769;
-				double P1lng = 3.876622;												
+				double latOrigine = Double.parseDouble(txtLAT.getText());//43.610769;
+				double lngOrigine = Double.parseDouble(txtLONG.getText());//3.876622;										
+							
+				//Calcul des coordonnées d'un point par methode polaire  (Lat Départ, Long Départ , Distance en km)
+				com.processing.Borders border = GeoProcessing.getWGS84FrameLimits(latOrigine, lngOrigine, slider.getValue());
 				
-				//Calcul des coordonnées d'un point par methode polaire 
-				com.processing.Point p2 = GeoProcessing.Polar(P1lat, P1lng, 30000, 0);
-				System.out.println("Lat>"+ p2.getLatitute());
-				System.out.println("Long>"+ p2.getLongitude());
+				//Recuperation des données
+				//Border Nord Ouest
+				System.out.println("Point Nord Ouest");
+				System.out.println("Lat >>> "+ border.getBorderNO().getLatitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().getLatitude()));
+				System.out.println("Long>>> "+ border.getBorderNO().getLongitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().getLongitude()));
+				//Controle
+				double distNO = GeoProcessing.getDistance(latOrigine, lngOrigine, border.getBorderNO().getLatitude(), border.getBorderNO().getLongitude());
+				System.out.println("Distance (km): " + distNO);
+				double azmNO = GeoProcessing.getAzimuth(latOrigine, lngOrigine, border.getBorderNO().getLatitude(), border.getBorderNO().getLongitude());
+				System.out.println("Azimuth (Deg): " + azmNO);
 				
-				//verification
-				double dist = GeoProcessing.distance(P1lat, P1lng, p2.getLatitute(), p2.getLongitude());
-				System.out.println(">>> Verif Distance : " + dist);
-				float azm = GeoProcessing.azimuth(P1lat, P1lng, p2.getLatitute(), p2.getLongitude());
-				System.out.println(">>> Verif Azimuth : " + azm);
+				System.out.println("");
+				
+				//Border Sud Est
+				System.out.println("Point Sud Est");
+				System.out.println("Lat >>> "+ border.getBorderSE().getLatitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().getLatitude()));
+				System.out.println("Long>>> "+ border.getBorderSE().getLongitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().getLongitude()));
+				//Controle				
+				double distSE = GeoProcessing.getDistance(latOrigine, lngOrigine, border.getBorderSE().getLatitude(), border.getBorderSE().getLongitude());
+				System.out.println("Distance (km): " + distSE);
+				double azmSE = GeoProcessing.getAzimuth(latOrigine, lngOrigine, border.getBorderSE().getLatitude(), border.getBorderSE().getLongitude());
+				System.out.println("Azimuth (Deg): " + azmSE);
+				System.out.println("");
+				
+				
 			}
 		});
 		GridBagConstraints gbc_btnInfos = new GridBagConstraints();
