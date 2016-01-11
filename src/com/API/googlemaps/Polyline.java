@@ -1,4 +1,4 @@
-package com.API.googlemaps;
+package com.api.googlemaps;
 
 public class Polyline {
 
