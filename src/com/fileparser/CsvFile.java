@@ -1,4 +1,4 @@
-package com.parser;
+package com.fileparser;
 import java.io.File;
 import java.util.List;
 

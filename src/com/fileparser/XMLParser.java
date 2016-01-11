@@ -1,4 +1,4 @@
-package com.parser;
+package com.fileparser;
 
 import java.io.*;
 import java.util.List;
@@ -10,7 +10,7 @@ import org.jdom2.*;
 import org.jdom2.input.DOMBuilder;
 
 import com.teamdev.jxbrowser.chromium.Browser;
-import com.API.googlemaps.Marker;
+import com.api.googlemaps.Marker;
 import com.processing.GeoProcessing;
 
 public class XMLParser {

@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.database.Params.ConnexionParameters;
+import com.database.param.ConnexionParameters;
 
 public final class ConnexionManager 
 {
@@ -23,7 +23,7 @@ public final class ConnexionManager
 	public static final ConnexionManager GetInstance()
 	{
 		if(_instance == null)
-		{	
+		{
 			synchronized(ConnexionManager.class) 
 			 {
 				if (ConnexionManager._instance == null) 

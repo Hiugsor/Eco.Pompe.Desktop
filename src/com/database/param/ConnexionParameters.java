@@ -1,4 +1,4 @@
-package com.database.Params;
+package com.database.param;
 
 public final class ConnexionParameters 
 {	

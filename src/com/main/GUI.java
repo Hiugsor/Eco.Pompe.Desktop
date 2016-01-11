@@ -1,9 +1,9 @@
 package com.main;
 
-import com.API.googlemaps.Circle;
-import com.API.googlemaps.JavaScript;
 import com.GUI.FrameStation;
-import com.parser.XMLParser;
+import com.api.googlemaps.Circle;
+import com.api.googlemaps.JavaScript;
+import com.fileparser.XMLParser;
 import com.processing.GeoProcessing;
 import com.processing.Borders;
 import com.teamdev.jxbrowser.chromium.Browser;
