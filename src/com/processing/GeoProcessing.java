@@ -16,7 +16,7 @@ public class GeoProcessing {
 		double lng1Rad = lng1d * PI / 180;
 		double lat2Rad = lat2d * PI / 180;
 		double lng2Rad = lng2d * PI / 180;		
-		//Formule de calcul de la distance
+		//Formule de calcul de la distance (Arc)
 		double distanceAngulaire = Math.acos(Math.sin(lat1Rad) * Math.sin(lat2Rad) + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.cos(lng2Rad-lng1Rad));
 		double distanceKM = distanceAngulaire * EarthaRadiusWGS84;		
 		return distanceKM;
