@@ -1,6 +1,6 @@
 package com.processing;
 
-public class Limite {
+public class Borders {
 
 	
 	//Attributs
@@ -28,7 +28,7 @@ public class Limite {
 	 * @param NO - Point Nord Ouest du cadre Limite
 	 * @param SE - Point Sud Est du cadre Limite
 	 */
-	public Limite(Point NO, Point SE)
+	public Borders(Point NO, Point SE)
 	{
 		this.BorderNO = NO;
 		this.BorderSE = SE;

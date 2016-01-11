@@ -5,7 +5,7 @@ import com.API.googlemaps.JavaScript;
 import com.GUI.FrameStation;
 import com.parser.XMLParser;
 import com.processing.GeoProcessing;
-import com.processing.Limite;
+import com.processing.Borders;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
@@ -441,23 +441,39 @@ public class GUI extends JFrame {
 		btnInfos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				myCardLayout.show(myCards, "Statistiques");
-				
-				
-				// Test Temporaire
+				System.out.println("");
+								
+				// Test Temporaire de calcul de coordonnées géographique
 				//Point de Depart
 				double latOrigine = Double.parseDouble(txtLAT.getText());//43.610769;
 				double lngOrigine = Double.parseDouble(txtLONG.getText());//3.876622;										
 							
 				//Calcul des coordonnées d'un point par methode polaire  (Lat Départ, Long Départ , Distance en km)
-				com.processing.Limite border = GeoProcessing.calculLimiteZone(latOrigine, lngOrigine, slider.getValue());
+				com.processing.Borders border = GeoProcessing.getWGS84FrameLimits(latOrigine, lngOrigine, slider.getValue());
 				
 				//Recuperation des données
 				//Border Nord Ouest
-				System.out.println("Lat >>>"+ border.getBorderNO().getLatitute());
-				System.out.println("Long>>>"+ border.getBorderNO().getLongitude());
+				System.out.println("Point Nord Ouest");
+				System.out.println("Lat >>> "+ border.getBorderNO().getLatitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().getLatitude()));
+				System.out.println("Long>>> "+ border.getBorderNO().getLongitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().getLongitude()));
+				//Controle
+				double distNO = GeoProcessing.getDistance(latOrigine, lngOrigine, border.getBorderNO().getLatitude(), border.getBorderNO().getLongitude());
+				System.out.println("Distance (km): " + distNO);
+				double azmNO = GeoProcessing.getAzimuth(latOrigine, lngOrigine, border.getBorderNO().getLatitude(), border.getBorderNO().getLongitude());
+				System.out.println("Azimuth (Deg): " + azmNO);
+				
+				System.out.println("");
+				
 				//Border Sud Est
-				System.out.println("Lat >>>"+ border.getBorderSE().getLatitute());
-				System.out.println("Long>>>"+ border.getBorderSE().getLongitude());
+				System.out.println("Point Sud Est");
+				System.out.println("Lat >>> "+ border.getBorderSE().getLatitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().getLatitude()));
+				System.out.println("Long>>> "+ border.getBorderSE().getLongitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().getLongitude()));
+				//Controle				
+				double distSE = GeoProcessing.getDistance(latOrigine, lngOrigine, border.getBorderSE().getLatitude(), border.getBorderSE().getLongitude());
+				System.out.println("Distance (km): " + distSE);
+				double azmSE = GeoProcessing.getAzimuth(latOrigine, lngOrigine, border.getBorderSE().getLatitude(), border.getBorderSE().getLongitude());
+				System.out.println("Azimuth (Deg): " + azmSE);
+				System.out.println("");
 				
 				
 			}

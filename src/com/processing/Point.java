@@ -2,20 +2,12 @@ package com.processing;
 
 public class Point {
 
-	private String name;
-	public String getName() {
-		return name;
+	private double latitude;
+	public double getLatitude() {
+		return latitude;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	private double latitute;
-	public double getLatitute() {
-		return latitute;
-	}
-	public void setLatitute(double latitute) {
-		this.latitute = latitute;
+	public void setLatitute(double latitude) {
+		this.latitude = latitude;
 	}
 
 	private double longitude;
@@ -26,10 +18,9 @@ public class Point {
 		this.longitude = longitude;
 	}
 	
-	public Point(String name, double lat, double lng)
-	{
-		this.name = name;
-		this.latitute = lat;
+	public Point(double lat, double lng)
+	{		
+		this.latitude = lat;
 		this.longitude = lng;
 	}
 }

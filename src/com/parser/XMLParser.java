@@ -76,7 +76,7 @@ public class XMLParser {
 
 				// >>> Création des Markers sous conditions d'être dans les limites géographiques de la france et corse
 				if (latMin <= lat && lat <= latMax && longMin <= lng && lng <= longMax) {
-					double distance = GeoProcessing.distance(Double.parseDouble(txtLat.getText()),
+					double distance = GeoProcessing.getDistance(Double.parseDouble(txtLat.getText()),
 							Double.parseDouble(txtLong.getText()), lat, lng);
 					if (distance <= slider.getValue()) {
 						// création du marker
