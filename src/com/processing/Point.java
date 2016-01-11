@@ -25,9 +25,6 @@ public class Point {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-
-	
-	
 	
 	public Point(String name, double lat, double lng)
 	{

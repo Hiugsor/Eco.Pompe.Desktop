@@ -1,5 +1,5 @@
 package com.processing;
-import com.processing.*;
+
 
 public class GeoProcessing {
 
@@ -20,40 +20,73 @@ public class GeoProcessing {
 		lng2 = lng2 * PI / 180;		
 		return EarthRadius * Math.acos(Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2-lng1) + Math.sin(lat1) * Math.sin(lat2));		
 	}
+	 
 	
-	public static float azimuth(Double lat1, Double lng1, Double lat2, Double lng2)
+	/*public static float azimuth(Double lat1, Double lng1, Double lat2, Double lng2)
 	{
-		float azm = (float) Math.toDegrees(Math.atan2(lng2 - lng1, lat2 - lat1));
-	    if(azm < 0){
+		lat1 = lat1 * PI / 180;
+		lng1 = lng1 * PI / 180;
+		lat2 = lat2 * PI / 180;
+		lng2 = lng2 * PI / 180;	
+		float azm = (float) Math.toDegrees(Math.atan2(lat2 - lat1, lng2 - lng1));
+	    if(azm < 0 || azm > 360)
+	    {
 	    	azm = azm % 360;
 	    }
 	    return azm;
-	}
+	}*/
 		
-	//Nota pour calculer le point du carré Nord-Ouest 
-	// dist = r * Math.sqrt(2) avec Azm @ 315°
 	
-	//Nota pour calculer le point du carré Sud-Est 
-	// dist = r * Math.sqrt(2) avec Azm @ 135°
-	
-	public static Point Polar(Double lat1, Double lng1, float distance, float azm)
+	public static Point Polar(Double latitude, Double longitude, float distance, float azimuth)
 	{
-		//Conversion Degré vers Radian
-		lat1 = lat1 * PI / 180;
-		lng1 = lng1 * PI / 180;		
-		
-		//Calcul de la Distance Angulaire
-		double angularDistance = distance/(EarthRadius*1000);	
-		
-		//Calcul Lat Long en Radian
-		double newLat = Math.asin(Math.sin(lat1) * Math.cos(angularDistance) + Math.cos(lat1) * Math.sin(angularDistance) * Math.cos(azm));
-		double newLng = lng1 + Math.atan2(Math.sin(azm) * Math.sin(angularDistance) * Math.cos(lat1), Math.cos(angularDistance) - Math.sin(lat1) * Math.sin(newLat));
-		
-		//Consersion Radian vers Degré
+		double distanceAngulaire = distance/EarthRadius;
+		latitude = latitude * PI /180;
+		longitude = longitude * PI / 180;
+		azimuth = (float) (azimuth * PI / 180);
+		double newLat = Math.asin(Math.sin(latitude)* Math.cos(distanceAngulaire) + Math.cos(latitude)*Math.sin(distanceAngulaire)*Math.cos(azimuth));
+		System.out.println("New Lat (Rad)" + newLat);
+		double newLong = longitude + Math.atan2(Math.sin(azimuth) * Math.sin(distanceAngulaire) * Math.cos(latitude), Math.cos(distanceAngulaire) - Math.sin(latitude) * Math.sin(newLat));
+		//Conversion rad en deg
 		newLat = newLat * 180 / PI;
-		newLng = newLng * 180 / PI;
-		Point pt = new Point("Point Calculé", newLat, newLng);
-		return pt;			
+		newLong = newLong * 180 / PI;		
+		Point pt = new Point("Point Calculé", newLat, newLong);
+		return pt;		
 	}
 	
+	
+	public static Limite calculLimiteZone(double latitude, Double longitude, float distance)
+	{
+		double angularDistance = distance/EarthRadius;
+		
+		//Azimuth des points encadrant le cercle de recherche
+		float azmNO = 315;
+		float azmSE = 135;
+				
+		//Conversion Degré vers Radian		
+		latitude = latitude * PI /180;
+		longitude = longitude * PI / 180;
+		azmNO = (float) (azmNO * PI / 180);	
+		azmSE = (float) (azmSE * PI / 180);	
+		
+		//Calcul de la Latitude du Point du cadre Nord Ouest
+		double latNO = Math.asin(Math.sin(latitude)* Math.cos(angularDistance) + Math.cos(latitude)*Math.sin(angularDistance)*Math.cos(azmNO));
+		//Calcul de la Longitude du Point du cadre Nord Ouest
+		double longNO = longitude + Math.atan2(Math.sin(azmNO) * Math.sin(angularDistance) * Math.cos(latitude), Math.cos(angularDistance) - Math.sin(latitude) * Math.sin(latNO));
+		//Conversion rad en deg
+		latNO = latNO * 180 / PI;
+		longNO = longNO * 180 / PI;		
+		Point ptNO = new Point("Point Nord Ouest", latNO, longNO);
+		
+		
+		//Calcul de la Latitude du Point du cadre Sud Est
+		double latSE = Math.asin(Math.sin(latitude)* Math.cos(angularDistance) + Math.cos(latitude)*Math.sin(angularDistance)*Math.cos(azmSE));
+		//Calcul de la Longitude du Point du cadre Sud Est
+		double longSE = longitude + Math.atan2(Math.sin(azmSE) * Math.sin(angularDistance) * Math.cos(latitude), Math.cos(angularDistance) - Math.sin(latitude) * Math.sin(latSE));
+		//Conversion rad en deg
+		latSE = latSE * 180 / PI;
+		longSE = longSE * 180 / PI;		
+		Point ptSE = new Point("Point Sud Est", latSE, longSE);
+		
+		return new Limite(ptNO, ptSE);		
+	}	
 }
