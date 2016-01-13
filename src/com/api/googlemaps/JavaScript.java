@@ -1,4 +1,4 @@
-package com.apii.googlemaps;
+package com.api.googlemaps;
 
 import com.teamdev.jxbrowser.chromium.Browser;
 
