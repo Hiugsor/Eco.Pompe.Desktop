@@ -476,6 +476,11 @@ public class GUI extends JFrame {
 				System.out.println("");
 				
 				
+				
+				//Test Conversion
+				double conversion = GeoProcessing.convert_DegSEXA_to_DegDEC("23°12\'34.56023455300001\"");
+				System.out.println(conversion);
+				
 			}
 		});
 		GridBagConstraints gbc_btnInfos = new GridBagConstraints();

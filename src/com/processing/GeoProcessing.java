@@ -117,6 +117,35 @@ public class GeoProcessing {
 		return conversion;
 	} 
 	
+	public static double convert_DegSEXA_to_DegDEC(String angle)
+	{
+		String sepDeg = "°";
+		String sepMin = "\'";
+		String sepSec = "\"";
+		
+		int posDeg = angle.indexOf(sepDeg);
+		System.out.println(posDeg);
+		int posMin = angle.indexOf(sepMin);
+		System.out.println(posMin);
+		int posSec = angle.indexOf(sepSec);
+		System.out.println(posSec);
+		
+		double deg = Double.parseDouble(angle.substring(0,posDeg));
+		System.out.println("Degres " + deg);		
+		double min = Double.parseDouble(angle.substring(posDeg + 1, posMin));		
+		System.out.println("Minutes " + min);		
+		double sec = Double.parseDouble(angle.substring(posMin + 1, posSec));		
+		System.out.println("Secondes " + sec);
+		
+		sec = sec /60;
+		min = min /60;
+			
+		System.out.println(sec);
+		System.out.println(min);
+		
+		return min;
+	}
+	
 	
 	// ////////////////////////////////////////////////////////////////////////////////////////////
 	//Exemple d'usage
