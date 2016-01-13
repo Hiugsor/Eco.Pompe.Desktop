@@ -1,4 +1,4 @@
-package com.api.googlemaps;
+package com.apii.googlemaps;
 
 import javax.swing.JTextField;
 import com.teamdev.jxbrowser.chromium.Browser;

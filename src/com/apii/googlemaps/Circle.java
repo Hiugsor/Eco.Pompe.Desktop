@@ -1,4 +1,4 @@
-package com.api.googlemaps;
+package com.apii.googlemaps;
 
 import javax.swing.*;
 
