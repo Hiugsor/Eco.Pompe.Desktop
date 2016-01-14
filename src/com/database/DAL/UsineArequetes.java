@@ -3,35 +3,103 @@ package com.database.DAL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.database.param.*;
 
-public final class ConnexionManager 
-{
-	private static ConnexionManager _instance = null;
+public class UsineArequetes {
+private static UsineArequetes _instance = null;
 	
 	private static Connection _connexion;
 	
-	private ConnexionManager()
+	private UsineArequetes()
 	{}	
 	
+	private static Statement recupererPrepareStatement(String requeteSQL)
+	{
+		Statement statement = null;
+		
+		try 
+		{
+			statement =  _connexion.prepareStatement(requeteSQL);
+		}
+		catch (SQLException e) 
+		{
+			System.out.println("ERREUR DANS LA CREATION D'UNE REQUETE PARAMETREE DANS L'USINE");
+			System.out.println(e.getMessage());
+		}		
+		catch (Exception e) 
+		{
+			System.out.println("ERREUR INCONNUE DANS <recupererPrepareStatement>");
+			System.out.println(e.getMessage());	
+		}		
+		
+		return statement;
+	}
+	
+	private static Statement recupererStatement()
+	{
+		Statement statement = null;
+		
+		try 
+		{
+			statement =  _connexion.createStatement();
+		}
+		catch (SQLException e) 
+		{
+			System.out.println("ERREUR DANS LA CREATION D'UNE REQUETE STANDARD DANS L'USINE");
+			System.out.println(e.getMessage());
+		}		
+		catch (Exception e) 
+		{
+			System.out.println("ERREUR INCONNUE DANS <recupererStatement>");
+			System.out.println(e.getMessage());	
+		}		
+		
+		return statement;
+	}
+		
+	private static Statement recupererCallableStatement(String requeteSQL)
+	{
+		Statement statement = null;
+		
+		try 
+		{
+			statement =  _connexion.prepareCall(requeteSQL);
+		}
+		catch (SQLException e) 
+		{
+			System.out.println("ERREUR DANS LA CREATION D'UNE REQUETE DE PROCEDURE STOCKEE DANS L'USINE");
+			System.out.println(e.getMessage());
+		}		
+		catch (Exception e) 
+		{
+			System.out.println("ERREUR INCONNUE DANS <recupererCallableStatement>");
+			System.out.println(e.getMessage());	
+		}	
+		
+		return statement;
+	}
+		
+	/*
 	public static Connection GetConnection()
 	{
 		return _connexion;		
 	}
+	*/
 	
-	public static final ConnexionManager GetInstance()
+	public static final UsineArequetes GetInstance()
 	{
 		if(_instance == null)
 		{	
-			synchronized(ConnexionManager.class) 
+			synchronized(UsineArequetes.class) 
 			 {
-				if (ConnexionManager._instance == null) 
+				if (UsineArequetes._instance == null) 
 	              {	            	  
 	            	  	try 
 	      				{	
 	            	  		Class.forName(ConnexionParameters.getDriverUrl()).newInstance();
-	            	  		ConnexionManager._instance = new ConnexionManager();
+	            	  		UsineArequetes._instance = new UsineArequetes();
 	            	  		
 	      				}
 	            	  	catch (ClassNotFoundException e) 
@@ -68,9 +136,7 @@ public final class ConnexionManager
 		
 		return _instance;
 	}
-	
-	
-	//@SuppressWarnings("finally")
+		
 	public boolean open()
 	{
 		if(_connexion == null)
@@ -106,6 +172,7 @@ public final class ConnexionManager
 					    	{
 				    			System.out.println("TENTATIVE DE FERMETURE DE LA CONNEXION APRES LEVE D'EXCEPTION DANS LA METHODE OPEN");
 				    			_connexion.close(); 
+				    			_connexion = null;  
 					    	}
 						}
 				    	catch (SQLException e) 
@@ -129,7 +196,6 @@ public final class ConnexionManager
 		return true;
 	}
 	
-	//@SuppressWarnings("finally")
 	public  boolean close()
 	{
 		if (_connexion != null)
@@ -169,4 +235,35 @@ public final class ConnexionManager
 		
 		return true;
 	}
+
+	public Statement recupererStatement(TypeStatement type, String requete)
+	{		
+		if((requete == null || requete.isEmpty()) && type != TypeStatement.Standard)
+		{
+			System.out.println("REQUETE INVALIDE DANS <recupererStatement>");
+			return null;
+		}
+		
+		if( _connexion == null)
+		{
+			System.out.println("CONNEXION FERMEE DANS <recupererStatement>");
+			return null;
+		}
+		
+		switch(type)
+		{
+			case Callable :
+				return recupererCallableStatement(requete);
+	
+			case Prepared :
+				return recupererPrepareStatement(requete);
+	
+			case Standard :
+				return recupererStatement();
+				
+				default : 
+					return null;		
+		}
+	}
+
 }

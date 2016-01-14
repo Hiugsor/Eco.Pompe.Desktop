@@ -6,19 +6,23 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import com.main.GUI;
 
-public class FrameStation {
+public class InsertStationFrame {
 
 	
 	
-	public FrameStation(JPanel  tabListe, int indexTabList, String Adresse, String CP, String Ville)
+	public InsertStationFrame(JPanel  tabListe, int indexTabList,String Adresse,String CP,String Ville )
 	{
+		
+		
 		JPanel blocBox = new JPanel();
 		blocBox.setBackground(Color.BLACK);
 		GridBagConstraints gbc_blocBox = new GridBagConstraints();
@@ -55,7 +59,7 @@ public class FrameStation {
 		gbl_panel_3.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panel_3.setLayout(gbl_panel_3);
 		
-		JLabel distance = new JLabel("< 500m");
+		JLabel distance = new JLabel(donneeTest.distanceAléa());
 		distance.setForeground(Color.GRAY);
 		distance.setFont(new Font("Tahoma", Font.BOLD, 20));
 		GridBagConstraints gbc_distance = new GridBagConstraints();
@@ -72,7 +76,9 @@ public class FrameStation {
 		gbc_logo.gridy = 0;
 		panel_3.add(logo, gbc_logo);
 		
-		JLabel info = new JLabel("<html><h2>"+ "Nom Station" +"</h2>"+ Adresse + "<BR>" + CP + " "+ Ville + "</html>");
+		
+				
+		JLabel info = new JLabel("<html><h2>"+ donneeTest.adresseTitreAléa()+"</h2>"+ Adresse+"<BR>"+CP+" "+Ville+"</html>");
 		info.setForeground(Color.GRAY);
 		info.setFont(new Font("Tahoma", Font.BOLD, 14));
 		GridBagConstraints gbc_info = new GridBagConstraints();
@@ -81,7 +87,8 @@ public class FrameStation {
 		gbc_info.gridy = 0;
 		panel_3.add(info, gbc_info);
 		
-		JLabel prix = new JLabel("1.33 euros");
+		
+		JLabel prix = new JLabel(donneeTest.prixAléa());
 		prix.setForeground(Color.WHITE);
 		prix.setFont(new Font("Tahoma", Font.PLAIN, 28));
 		GridBagConstraints gbc_prix = new GridBagConstraints();
