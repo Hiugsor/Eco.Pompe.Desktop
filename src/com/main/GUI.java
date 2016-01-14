@@ -1,18 +1,28 @@
 package com.main;
 
-import com.API.googlemaps.Circle;
-import com.API.googlemaps.JavaScript;
 import com.GUI.FrameStation;
-import com.parser.XMLParser;
-import com.processing.GeoProcessing;
+import com.api.googlemaps.Circle;
+import com.api.googlemaps.JavaScript;
+import com.bo.Carburant;
+import com.bo.Coordonnees;
+import com.bo.Critere;
+import com.bo.Point;
+import com.bo.Recherche;
+import com.bo.Station;
+import com.bo.TypeService;
+import com.dao.StationDao;
+import com.fileparser.XMLParser;
+import com.processing.GeoProcessing_xtof;
+import com.processing.GestionRecherche;
 import com.processing.Borders;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
-
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.*;
@@ -26,10 +36,11 @@ public class GUI extends JFrame {
 	public static final int MIN_ZOOM = 0;
 	public static final int MAX_ZOOM = 21;
 	private static int zoomValue = 4;
-	//public static List<String[]> ListeStations;
-	
-	
-	//private static String xmlSource = "src\\Data\\XML\\PrixCarburants_quotidien_20151210.xml";
+	public static ArrayList<Station> ListeStationsDAO = null;
+	public static List<String[]> ListeStations;
+
+	// private static String xmlSource =
+	// "src\\Data\\XML\\PrixCarburants_quotidien_20151210.xml";
 	static String workingDir = System.getProperty("user.dir");
 
 	/** Launch the application. */
@@ -44,9 +55,9 @@ public class GUI extends JFrame {
 						}
 					}
 					new GUI();
-					//GUI window = new GUI();
-					//window.frame.setVisible(true);
-					
+					// GUI window = new GUI();
+					// window.frame.setVisible(true);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -63,17 +74,16 @@ public class GUI extends JFrame {
 	private void initialize() {
 		final Browser browser = new Browser();
 		BrowserView browserView = new BrowserView(browser);
-		List<String[]> ListeStations = new ArrayList<String[]>(); //Liste des stations utilisï¿½e par le btnListeStation
+		JButton btnGenerateStations = new JButton("Generate Stations");
+
 		JPanel tabListe = new JPanel();
-				
-		
+
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JFRAME
 		JFrame frame = new JFrame("EcoPompe");
 		frame.getContentPane().setBackground(Color.BLACK);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JPANEL NAVIGATOR (Panneau de gauche)
 		JPanel navigationBar = new JPanel();
@@ -144,7 +154,7 @@ public class GUI extends JFrame {
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = 10;
 		navigationBar.add(lblRadius, gbc_lblNewLabel);
-		
+
 		// //////////////////////////////////////////////////////////
 		// SLIDER
 		final int MIN = 0;
@@ -158,20 +168,68 @@ public class GUI extends JFrame {
 		slider.setForeground(new Color(138, 202, 206));
 		slider.setBackground(new Color(39, 39, 39));
 		// Event Change Value on SLIDER
-		slider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				JavaScript.deleteStations(browser); // suppression des points Stations
+		// slider.addMouseListener(l);
+		 slider.addChangeListener(new ChangeListener() {
+		 public void stateChanged(ChangeEvent e) 
+		 {		
+		  JavaScript.deleteStations(browser); // suppression des points // Stations 
+		  lblRadius.setText("Rayon : " + Integer.toString(slider.getValue()) + " km"); 
+		  new Circle(browser, txtLAT, txtLONG, slider);
+		  	}
+		 });
+
+		slider.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				//JavaScript.deleteStations(browser); // suppression des points
+				
+				// Stations
+				//lblRadius.setText("Rayon : " + Integer.toString(slider.getValue()) + " km");
+				//new Circle(browser, txtLAT, txtLONG, slider);
+
+				// Rexecute btn Genaration des stations
+				btnGenerateStations.doClick();
+				XMLParser.GenerateStationBDD(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				// TODO Auto-generated method stub
+				// TODO Auto-generated method stub
+				JavaScript.deleteStations(browser); // suppression des points
+				// Stations
 				lblRadius.setText("Rayon : " + Integer.toString(slider.getValue()) + " km");
 				new Circle(browser, txtLAT, txtLONG, slider);
-				// Generation des Markers des stations
-				XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider, ListeStations);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+
 			}
 		});
+
 		// Event Mouse Wheel on SLIDER
 		slider.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent evt) {
-				if (evt.getWheelRotation() < 0) { // mouse wheel was rotated up/away from the user
+				if (evt.getWheelRotation() < 0) { // mouse wheel was rotated
+													// up/away from the user
 					int iNewValue = slider.getValue() - slider.getMinorTickSpacing();
 					if (iNewValue >= slider.getMinimum()) {
 						slider.setValue(iNewValue);
@@ -230,7 +288,7 @@ public class GUI extends JFrame {
 
 		// //////////////////////////////////////////////////////////
 		// BTN Creation du POI (point of interest)
-		JButton btnGenerateStations = new JButton("Generate Stations");
+		// JButton btnGenerateStations = new JButton("Generate Stations");
 		GridBagConstraints gbc_setMarkerButton = new GridBagConstraints();
 		gbc_setMarkerButton.fill = GridBagConstraints.BOTH;
 		gbc_setMarkerButton.insets = new Insets(0, 0, 5, 0);
@@ -241,14 +299,51 @@ public class GUI extends JFrame {
 		btnGenerateStations.setForeground(new Color(138, 202, 206));
 		btnGenerateStations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try 
-				{
-					JavaScript.deleteStations(browser);	// Suppression des anciennes stations eventuelles
-					XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG, slider, ListeStations); // Generation des Markers des stations
-				} 
-				catch (Exception ex) 
-				{
-					System.out.println("Execption " + ex.getMessage());
+				try {
+					JavaScript.deleteStations(browser); // Suppression des
+														// anciennes stations
+														// eventuelles
+
+					ListeStations = null;
+					ListeStationsDAO = null;
+
+					String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+					System.out.println("Debut Test n°1 @ " + timeStamp);
+
+					// recuperation des données input
+					Recherche recherche = new Recherche();
+					GestionRecherche grecherche = new GestionRecherche();
+					Critere critere = new Critere();
+					Point position = new Point();
+					Coordonnees coordonnee = new Coordonnees();
+					coordonnee.setLatitude(Double.parseDouble(txtLAT.getText()));
+					coordonnee.setLongitude(Double.parseDouble(txtLONG.getText()));
+					position.setCoordonnee(coordonnee);
+					critere.setPosition(position);
+					recherche.setCritere(critere);
+					critere.setRayon(slider.getValue());
+					System.out.println(critere.getRayon());
+					System.out.println(coordonnee.getLongitude());
+					System.out.println(coordonnee.getLatitude());
+
+					int i = 0;
+					// Initialisation de liste
+					try {
+						ListeStationsDAO = grecherche.recupereStations(recherche);
+
+					} catch (Exception ex) {
+						// ex.printStackTrace();
+						ex.getStackTrace();
+					}
+
+					ListeStations = XMLParser.GenerateStationBDD(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
+
+					timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+					System.out.println("Fin Test n°1 @ " + timeStamp);
+
+				} catch (Exception ex) {
+					// System.out.println("Execption " + ex.getMessage());
+					// ex.printStackTrace();
 				}
 			}
 		});
@@ -270,16 +365,16 @@ public class GUI extends JFrame {
 					ListeStations.clear();
 					tabListe.removeAll();
 					tabListe.repaint();
-					JavaScript.deleteStations(browser); // suppression des points Stations
+					JavaScript.deleteStations(browser); // suppression des
+														// points Stations
 				} catch (Exception ex) {
 					System.out.println("Execption " + ex.getMessage());
 				}
 			}
 		});
 
-		
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// JPANEL PANNEAU HAUT (3 btn)		
+		// JPANEL PANNEAU HAUT (3 btn)
 		JPanel panel_haut = new JPanel();
 		panel_haut.setBackground(new Color(39, 39, 39));
 
@@ -320,37 +415,35 @@ public class GUI extends JFrame {
 		panel_1.setLayout(gbl_panel_1);
 
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// CARDLAYOUT (init)		
+		// CARDLAYOUT (init)
 		JPanel myCards = new JPanel(new CardLayout());
-		
-		
+
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FENETRE CARTE
 		JPanel tabCarte = new JPanel();
 		tabCarte.setBackground(Color.BLACK);
 		tabCarte.setLayout(new BorderLayout(0, 0));
-		tabCarte.add(browserView, BorderLayout.CENTER);		
+		tabCarte.add(browserView, BorderLayout.CENTER);
 		myCards.add("Carte", tabCarte);
-		
-		
+
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FENETRE LISTE DES STATIONS
-		
-		
+
 		JScrollPane scrb = new JScrollPane(tabListe);
 		scrb.setBorder(null);
-		tabListe.setBackground(Color.BLACK); //Couleur de test visuel - ï¿½ supprimer plus tard
-		//tabListe.setBackground(new Color(39, 39, 39));
+		tabListe.setBackground(Color.BLACK); // Couleur de test visuel - ï¿½
+												// supprimer plus tard
+		// tabListe.setBackground(new Color(39, 39, 39));
 		myCards.add("Liste_Stations", scrb);
 
-		//myCards.add("Liste_Stations", tabListe);
+		// myCards.add("Liste_Stations", tabListe);
 		GridBagLayout gbl_tabListe = new GridBagLayout();
-		gbl_tabListe.columnWidths = new int[]{25, 945, 0, 0};
-		gbl_tabListe.rowHeights = new int[]{25, 177, 0, 46, 0, 46, 0};
-		gbl_tabListe.columnWeights = new double[]{0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_tabListe.rowWeights = new double[]{0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_tabListe.columnWidths = new int[] { 25, 945, 0, 0 };
+		gbl_tabListe.rowHeights = new int[] { 25, 177, 0, 46, 0, 46, 0 };
+		gbl_tabListe.columnWeights = new double[] { 0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_tabListe.rowWeights = new double[] { 0, 0.0, 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		tabListe.setLayout(gbl_tabListe);
-		
+
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/espace.png")));
 		label.setBackground(Color.BLACK);
@@ -359,22 +452,19 @@ public class GUI extends JFrame {
 		gbc_label.gridx = 1;
 		gbc_label.gridy = 0;
 		tabListe.add(label, gbc_label);
-		
-						
-		
+
 		// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FENETRE STATISTIQUES
 		JPanel tabStat = new JPanel();
-		tabStat.setBackground(Color.BLUE);  //Couleur de test visuel - ï¿½ supprimer plus tard
-		//tabStat.setBackground(new Color(39, 39, 39));
+		tabStat.setBackground(Color.BLUE); // Couleur de test visuel - ï¿½
+											// supprimer plus tard
+		// tabStat.setBackground(new Color(39, 39, 39));
 		myCards.add("Statistiques", tabStat);
-				
-		
+
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// CARDLAYOUT (config)
-		CardLayout myCardLayout = (CardLayout)(myCards.getLayout());
+		CardLayout myCardLayout = (CardLayout) (myCards.getLayout());
 		frame.getContentPane().add(myCards, BorderLayout.CENTER);
-		
 
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JBUTTONS (Carte, Liste, Stat)
@@ -402,26 +492,34 @@ public class GUI extends JFrame {
 		btnListeStations.setPreferredSize(new Dimension(200, 40));
 		btnListeStations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Affichage du panneau Liste des Stations
+				// Affichage du panneau Liste des Stations
 				myCardLayout.show(myCards, "Liste_Stations");
-				// Recuperation des donnï¿½es du tableau listeStations issues de l'import du fichier xml-csv ou db (pour l'instant issue de la fonction XMLParser )
+				// Recuperation des donnï¿½es du tableau listeStations issues de
+				// l'import du fichier xml-csv ou db (pour l'instant issue de la
+				// fonction XMLParser )
 				if (ListeStations.size() > 0) {
 					System.out.println(ListeStations.size());
 					int index = 0;
 					for (String[] station : ListeStations) {
-						System.out.println("-> Num "+ ++index + " | Station ID : " + station[0] + " | Adresse : " + station[1] + " | Code Postal : "+station[2] + " | Ville : " + station[3] + " | Lat : " + station[4] + " | Long : " + station[5]);
+						System.out.println("-> Num " + ++index + " | Station ID : " + station[0] + " | Adresse : "
+								+ station[1] + " | Code Postal : " + station[2] + " | Ville : " + station[3]
+								+ " | Lat : " + station[4] + " | Long : " + station[5]);
 					}
 					System.out.println(">>> End of process [OK]");
-					
+
 					int indexTabList = 1;
-					for (int i = 0; i < ListeStations.size(); i++) {
-						new FrameStation(tabListe, indexTabList );
+					/*
+					 * for (int i = 0; i < ListeStations.size(); i++) { new
+					 * FrameStation(tabListe, indexTabList); indexTabList++; }
+					 */
+					for (String[] station : ListeStations) {
+
+						new FrameStation(tabListe, indexTabList, station[1], station[2], station[3]);
 						indexTabList++;
-					}				
-					
-				}
-				else 
-				{
+
+					}
+
+				} else {
 					System.out.println(">>> La liste des staions est vide !!!");
 				}
 			}
@@ -441,41 +539,62 @@ public class GUI extends JFrame {
 		btnInfos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				myCardLayout.show(myCards, "Statistiques");
-				System.out.println("");
-								
-				// Test Temporaire de calcul de coordonnées géographique
-				//Point de Depart
-				double latOrigine = Double.parseDouble(txtLAT.getText());//43.610769;
-				double lngOrigine = Double.parseDouble(txtLONG.getText());//3.876622;										
-							
-				//Calcul des coordonnées d'un point par methode polaire  (Lat Départ, Long Départ , Distance en km)
-				com.processing.Borders border = GeoProcessing.getWGS84FrameLimits(latOrigine, lngOrigine, slider.getValue());
-				
-				//Recuperation des données
-				//Border Nord Ouest
-				System.out.println("Point Nord Ouest");
-				System.out.println("Lat >>> "+ border.getBorderNO().getLatitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().getLatitude()));
-				System.out.println("Long>>> "+ border.getBorderNO().getLongitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().getLongitude()));
-				//Controle
-				double distNO = GeoProcessing.getDistance(latOrigine, lngOrigine, border.getBorderNO().getLatitude(), border.getBorderNO().getLongitude());
-				System.out.println("Distance (km): " + distNO);
-				double azmNO = GeoProcessing.getAzimuth(latOrigine, lngOrigine, border.getBorderNO().getLatitude(), border.getBorderNO().getLongitude());
-				System.out.println("Azimuth (Deg): " + azmNO);
-				
-				System.out.println("");
-				
-				//Border Sud Est
-				System.out.println("Point Sud Est");
-				System.out.println("Lat >>> "+ border.getBorderSE().getLatitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().getLatitude()));
-				System.out.println("Long>>> "+ border.getBorderSE().getLongitude() + " ou "  + GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().getLongitude()));
-				//Controle				
-				double distSE = GeoProcessing.getDistance(latOrigine, lngOrigine, border.getBorderSE().getLatitude(), border.getBorderSE().getLongitude());
-				System.out.println("Distance (km): " + distSE);
-				double azmSE = GeoProcessing.getAzimuth(latOrigine, lngOrigine, border.getBorderSE().getLatitude(), border.getBorderSE().getLongitude());
-				System.out.println("Azimuth (Deg): " + azmSE);
-				System.out.println("");
-				
-				
+
+				/*
+				 * System.out.println(""); // Test Temporaire de calcul de
+				 * coordonnées géographique // Point de Depart double latOrigine
+				 * = Double.parseDouble(txtLAT.getText());// 43.610769; double
+				 * lngOrigine = Double.parseDouble(txtLONG.getText());//
+				 * 3.876622;
+				 * 
+				 * // Calcul des coordonnées d'un point par methode polaire (Lat
+				 * // Départ, Long Départ , Distance en km)
+				 * com.processing.Borders border =
+				 * GeoProcessing.getWGS84FrameLimits(latOrigine, lngOrigine,
+				 * slider.getValue());
+				 * 
+				 * // Recuperation des données // Border Nord Ouest
+				 * System.out.println("Point Nord Ouest"); System.out.println(
+				 * "Lat >>> " + border.getBorderNO().getLatitude() + " ou " +
+				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().
+				 * getLatitude())); System.out.println("Long>>> " +
+				 * border.getBorderNO().getLongitude() + " ou " +
+				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().
+				 * getLongitude())); // Controle double distNO =
+				 * GeoProcessing.getDistance(latOrigine, lngOrigine,
+				 * border.getBorderNO().getLatitude(),
+				 * border.getBorderNO().getLongitude()); System.out.println(
+				 * "Distance (km): " + distNO); double azmNO =
+				 * GeoProcessing.getAzimuth(latOrigine, lngOrigine,
+				 * border.getBorderNO().getLatitude(),
+				 * border.getBorderNO().getLongitude()); System.out.println(
+				 * "Azimuth (Deg): " + azmNO);
+				 * 
+				 * System.out.println("");
+				 * 
+				 * // Border Sud Est System.out.println("Point Sud Est");
+				 * System.out.println("Lat >>> " +
+				 * border.getBorderSE().getLatitude() + " ou " +
+				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().
+				 * getLatitude())); System.out.println("Long>>> " +
+				 * border.getBorderSE().getLongitude() + " ou " +
+				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().
+				 * getLongitude())); // Controle double distSE =
+				 * GeoProcessing.getDistance(latOrigine, lngOrigine,
+				 * border.getBorderSE().getLatitude(),
+				 * border.getBorderSE().getLongitude()); System.out.println(
+				 * "Distance (km): " + distSE); double azmSE =
+				 * GeoProcessing.getAzimuth(latOrigine, lngOrigine,
+				 * border.getBorderSE().getLatitude(),
+				 * border.getBorderSE().getLongitude()); System.out.println(
+				 * "Azimuth (Deg): " + azmSE); System.out.println("");
+				 * 
+				 * // Test Conversion double conversion =
+				 * GeoProcessing.convert_DegSEXA_to_DegDEC(
+				 * "23°12\'34.56023455300001\"");
+				 * System.out.println(conversion);
+				 */
+
 			}
 		});
 		GridBagConstraints gbc_btnInfos = new GridBagConstraints();
@@ -484,8 +603,7 @@ public class GUI extends JFrame {
 		gbc_btnInfos.gridx = 5;
 		gbc_btnInfos.gridy = 1;
 		panel_1.add(btnInfos, gbc_btnInfos);
-		
-		
+
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JButtons du ruban Jpanel toolbar en bas
 		JButton zoomInButton = new JButton("Zoom In");
@@ -510,7 +628,6 @@ public class GUI extends JFrame {
 			}
 		});
 
-		
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// TOOLBAR EN BAS
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -520,13 +637,11 @@ public class GUI extends JFrame {
 		toolBar_bas.add(zoomOutButton);
 		frame.getContentPane().add(toolBar_bas, BorderLayout.SOUTH);
 
-		
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		frame.setSize(1538, 900);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
-		
 		// Import de la carte de la page HTML (du serveur?) sur le browser
 		browser.loadURL(workingDir + "\\src\\Data\\HTML\\map.html");
 

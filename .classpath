@@ -26,5 +26,12 @@
 	<classpathentry kind="lib" path="lib/jdbc/com.mysql.jdbc_5.1.5.jar"/>
 	<classpathentry kind="lib" path="lib/JxBrowser 6/jxbrowser-6.0.jar"/>
 	<classpathentry kind="lib" path="lib/JxBrowser 6/jxbrowser-win-6.0.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/google-maps-services-0.1.9.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/gson-2.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/joda-time-2.9.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/mysql-connector-java-5.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/okhttp-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/okio-1.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/ecopompe-2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

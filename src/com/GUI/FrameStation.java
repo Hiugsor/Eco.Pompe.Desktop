@@ -17,7 +17,7 @@ public class FrameStation {
 
 	
 	
-	public FrameStation(JPanel  tabListe, int indexTabList )
+	public FrameStation(JPanel  tabListe, int indexTabList, String Adresse, String CP, String Ville)
 	{
 		JPanel blocBox = new JPanel();
 		blocBox.setBackground(Color.BLACK);
@@ -72,7 +72,7 @@ public class FrameStation {
 		gbc_logo.gridy = 0;
 		panel_3.add(logo, gbc_logo);
 		
-		JLabel info = new JLabel("Station-Service AGIP \n\n544 Rue Paul Rimbaud \n\n04.67.63.08.18 ");
+		JLabel info = new JLabel("<html><h2>"+ "Nom Station" +"</h2>"+ Adresse + "<BR>" + CP + " "+ Ville + "</html>");
 		info.setForeground(Color.GRAY);
 		info.setFont(new Font("Tahoma", Font.BOLD, 14));
 		GridBagConstraints gbc_info = new GridBagConstraints();

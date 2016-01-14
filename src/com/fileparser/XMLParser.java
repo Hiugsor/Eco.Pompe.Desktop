@@ -1,6 +1,7 @@
-package com.parser;
+package com.fileparser;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JSlider;
@@ -10,8 +11,11 @@ import org.jdom2.*;
 import org.jdom2.input.DOMBuilder;
 
 import com.teamdev.jxbrowser.chromium.Browser;
-import com.API.googlemaps.Marker;
-import com.processing.GeoProcessing;
+
+import com.api.googlemaps.Marker;
+import com.bo.Station;
+import com.dao.StationDao;
+import com.processing.GeoProcessing_xtof;
 
 public class XMLParser {
 
@@ -19,7 +23,7 @@ public class XMLParser {
 	static String workingDir = System.getProperty("user.dir");
 	private static String xmlSource = workingDir + "\\src\\Data\\XML\\PrixCarburants_quotidien_20151210.xml";
 
-	// Limites Géographiques de la France et corse
+	// Limites Gï¿½ographiques de la France et corse
 	public static double latMin = 41.319505;
 	public static double latMax = 51.190288;
 	public static double longMin = -5.182504;
@@ -32,7 +36,7 @@ public class XMLParser {
 	 */
 	public static void GenerateStationFromCSV(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider,
 			List<String[]> ListeStations) {
-		// >>> Déclarations
+		// >>> DÃ©clarations
 		CsvFileRead csvFile;
 		List<String[]> lines;
 		int counter = 0;
@@ -44,13 +48,17 @@ public class XMLParser {
 			lines = csvFile.getData();
 
 			for (String[] column : lines) {
-				// >>> Contrôles des données 1/4 - Vérification Si CodePostal Vide
+				// >>> Contrï¿½les des donnï¿½es 1/4 - Vï¿½rification Si
+				// CodePostal
+				// Vide
 				if (column[3].length() == 0) {
 					column[3] = "0";
 				}
-				//int cp = Integer.parseInt(column[3]);
+				// int cp = Integer.parseInt(column[3]);
 
-				// >>> Contrôles des données 2/4 - Vérification de valeurs vides sur les latitudes & les longitudes
+				// >>> Contrï¿½les des donnï¿½es 2/4 - Vï¿½rification de valeurs
+				// vides
+				// sur les latitudes & les longitudes
 				if (column[1].length() == 0 && column[2].length() != 0) {
 					column[1] = "0";
 				} else if (column[2].length() == 0 && column[1].length() != 0) {
@@ -59,12 +67,16 @@ public class XMLParser {
 					column[1] = column[2] = "0";
 				}
 
-				// >>> Contrôles des données 3/4 - Suppression du premier espace dans l'adresse.
+				// >>> Contrï¿½les des donnï¿½es 3/4 - Suppression du premier
+				// espace
+				// dans l'adresse.
 				if (column[4].substring(0, 1).contains(" ")) {
 					column[4] = column[4].substring(1, (column[4].length()));
 				}
 
-				// >>> Contrôles des données 4/4 - Vérification d'inversion des lat-long dans le fichier csv
+				// >>> Contrï¿½les des donnï¿½es 4/4 - Vï¿½rification
+				// d'inversion des
+				// lat-long dans le fichier csv
 				double lat = Double.parseDouble(column[1]) / 100000;
 				double lng = Double.parseDouble(column[2]) / 100000;
 				if ((lat < lng)) {
@@ -74,23 +86,24 @@ public class XMLParser {
 					}
 				}
 
-				// >>> Création des Markers sous conditions d'être dans les limites géographiques de la france et corse
+				// >>> Crï¿½ation des Markers sous conditions d'ï¿½tre dans les
+				// limites gï¿½ographiques de la france et corse
 				if (latMin <= lat && lat <= latMax && longMin <= lng && lng <= longMax) {
-					double distance = GeoProcessing.getDistance(Double.parseDouble(txtLat.getText()),
+					double distance = GeoProcessing_xtof.getDistance(Double.parseDouble(txtLat.getText()),
 							Double.parseDouble(txtLong.getText()), lat, lng);
 					if (distance <= slider.getValue()) {
-						// création du marker
+						// crï¿½ation du marker
 						new Marker(browser, lat, lng, column[0], column[4], column[3], column[5]);
-						 // Creation d'un tableau des infos station
+						// Creation d'un tableau des infos station
 						String[] station = new String[] { column[0], column[4], column[3], column[5],
 								Double.toString(lat), Double.toString(lng) };
 						// Ajout du tableau dans la liste des Stations
-						ListeStations.add(station); 
+						ListeStations.add(station);
 						counter++;
 					}
 				}
 			}
-			System.out.println(">>> Nb de Stations inserées dans la ListeStations : " + ListeStations.size());
+			System.out.println(">>> Nb de Stations inserÃ©es dans la ListeStations : " + ListeStations.size());
 			System.out.println(">>> Job Done ! with " + counter + " stations imported. [Good]");
 		} catch (Exception e) {
 			System.out.println(">>> Execption " + /* e.getMessage()) + */ e.getStackTrace());
@@ -98,8 +111,8 @@ public class XMLParser {
 	}
 
 	/**
-	 * Methode d"analyse d'un fichier XML [à retravailler en focntion du code de
-	 * traitement de la methode GenerateStationFromCSV()]
+	 * Methode d"analyse d'un fichier XML [ï¿½ retravailler en focntion du code
+	 * de traitement de la methode GenerateStationFromCSV()]
 	 * 
 	 * @param browser
 	 */
@@ -139,4 +152,31 @@ public class XMLParser {
 		System.out.println("Done!");
 
 	}// [End Method]
+
+	public static List<String[]> GenerateStationBDD(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider,
+			ArrayList<Station> ListeStations)
+	{
+		
+		List<String[]> StationsExport = new ArrayList<String[]>();
+		
+		if (ListeStations != null)
+		{
+			for (Station st : ListeStations)
+			{				
+					// creation du marker
+					new Marker(browser, st.getAdresse().getPosition().getCoordonnee().getLatitude(),
+							st.getAdresse().getPosition().getCoordonnee().getLongitude(),
+							st.getId().toString(), st.getAdresse().getRue(),
+							st.getAdresse().getCodepostal(), st.getAdresse().getVille());
+					// Creation d'un tableau des infos station
+					String[] station = new String[] { st.getId().toString(), st.getAdresse().getRue(),
+							st.getAdresse().getCodepostal(), st.getAdresse().getVille(),
+							st.getAdresse().getPosition().getCoordonnee().getLatitude().toString(),
+							st.getAdresse().getPosition().getCoordonnee().getLongitude().toString() };
+					// Ajout du tableau dans la liste des Stations					
+					StationsExport.add(station);
+			}
+		}
+			return StationsExport;
+	}
 }// [End Class]

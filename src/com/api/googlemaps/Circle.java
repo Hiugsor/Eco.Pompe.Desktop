@@ -1,8 +1,8 @@
-package com.API.googlemaps;
+package com.api.googlemaps;
 
 import javax.swing.*;
 
-import com.API.googlemaps.Marker;
+import com.api.googlemaps.Marker;
 import com.teamdev.jxbrowser.chromium.Browser;
 
 public class Circle 
