@@ -1,28 +1,14 @@
 package com.main;
 
-import com.GUI.FrameStation;
-import com.api.googlemaps.Circle;
-import com.api.googlemaps.JavaScript;
-import com.bo.Carburant;
-import com.bo.Coordonnees;
-import com.bo.Critere;
-import com.bo.Point;
-import com.bo.Recherche;
-import com.bo.Station;
-import com.bo.TypeService;
-import com.dao.StationDao;
-import com.fileparser.XMLParser;
-import com.processing.GeoProcessing_xtof;
-import com.processing.GestionRecherche;
-import com.processing.Borders;
+import com.API.googlemaps.Circle;
+import com.API.googlemaps.JavaScript;
+import com.GUI.InsertStationFrame;
+import com.parser.XMLParser;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.swing.*;
@@ -31,25 +17,35 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.*;
 
 //Class
-public class GUI extends JFrame {
+public class GUI extends JFrame
+{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Attributs
 	public static final int MIN_ZOOM = 0;
 	public static final int MAX_ZOOM = 21;
 	private static int zoomValue = 4;
-	public static ArrayList<Station> ListeStationsDAO = null;
-	public static List<String[]> ListeStations;
+	// public static List<String[]> ListeStations;
 
 	// private static String xmlSource =
 	// "src\\Data\\XML\\PrixCarburants_quotidien_20151210.xml";
 	static String workingDir = System.getProperty("user.dir");
 
 	/** Launch the application. */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-						if ("Nimbus".equals(info.getName())) {
+	public static void main(String[] args)
+	{
+		EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
+					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+					{
+						if ("Nimbus".equals(info.getName()))
+						{
 							UIManager.setLookAndFeel(info.getClassName());
 							break;
 						}
@@ -58,7 +54,9 @@ public class GUI extends JFrame {
 					// GUI window = new GUI();
 					// window.frame.setVisible(true);
 
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					e.printStackTrace();
 				}
 			}
@@ -66,17 +64,33 @@ public class GUI extends JFrame {
 	}
 
 	/** Create the application. */
-	public GUI() {
+	public GUI()
+	{
 		initialize();
 	}
 
 	/** Initialize the contents of the frame. */
-	private void initialize() {
+	private void initialize()
+	{
 		final Browser browser = new Browser();
 		BrowserView browserView = new BrowserView(browser);
-		JButton btnGenerateStations = new JButton("Generate Stations");
-
-		JPanel tabListe = new JPanel();
+		List<String[]> ListeStations = new ArrayList<String[]>(); // Liste des
+																	// stations
+																	// utilis√©e
+																	// par le
+																	// btnListeStation
+		/*
+		 * StationDao stationdao = new StationDao(); ArrayList<Station> stations
+		 * = (ArrayList<Station>) stationdao.getStations(); if(stations != null)
+		 * { for(Station st : stations) { String[] station = new String[] {
+		 * st.getId().toString(), st.getAdresse().getRue(),
+		 * st.getAdresse().getCodepostal(), st.getAdresse().getVille(),
+		 * st.getAdresse().getPosition().getCoordonnee().getLatitude().toString(
+		 * ),
+		 * st.getAdresse().getPosition().getCoordonnee().getLongitude().toString
+		 * () }; // Ajout du tableau dans la liste des Stations
+		 * ListeStations.add(station); } }
+		 */
 
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JFRAME
@@ -168,78 +182,44 @@ public class GUI extends JFrame {
 		slider.setForeground(new Color(138, 202, 206));
 		slider.setBackground(new Color(39, 39, 39));
 		// Event Change Value on SLIDER
-		// slider.addMouseListener(l);
-		 slider.addChangeListener(new ChangeListener() {
-		 public void stateChanged(ChangeEvent e) 
-		 {		
-		  JavaScript.deleteStations(browser); // suppression des points // Stations 
-		  lblRadius.setText("Rayon : " + Integer.toString(slider.getValue()) + " km"); 
-		  new Circle(browser, txtLAT, txtLONG, slider);
-		  	}
-		 });
-
-		slider.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				//JavaScript.deleteStations(browser); // suppression des points
-				
-				// Stations
-				//lblRadius.setText("Rayon : " + Integer.toString(slider.getValue()) + " km");
-				//new Circle(browser, txtLAT, txtLONG, slider);
-
-				// Rexecute btn Genaration des stations
-				btnGenerateStations.doClick();
-				XMLParser.GenerateStationBDD(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-				// TODO Auto-generated method stub
-				// TODO Auto-generated method stub
+		slider.addChangeListener(new ChangeListener()
+		{
+			public void stateChanged(ChangeEvent e)
+			{
 				JavaScript.deleteStations(browser); // suppression des points
-				// Stations
+													// Stations
 				lblRadius.setText("Rayon : " + Integer.toString(slider.getValue()) + " km");
 				new Circle(browser, txtLAT, txtLONG, slider);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-
+				// Generation des Markers des stations
+				// XMLParser.GenerateStationFromCSV(browser, txtLAT, txtLONG,
+				// slider, ListeStations);
+				XMLParser.GenerateStationBDD(browser, txtLAT, txtLONG, slider, ListeStations);
 			}
 		});
-
 		// Event Mouse Wheel on SLIDER
-		slider.addMouseWheelListener(new MouseWheelListener() {
+		slider.addMouseWheelListener(new MouseWheelListener()
+		{
 			@Override
-			public void mouseWheelMoved(MouseWheelEvent evt) {
-				if (evt.getWheelRotation() < 0) { // mouse wheel was rotated
-													// up/away from the user
+			public void mouseWheelMoved(MouseWheelEvent evt)
+			{
+				if (evt.getWheelRotation() < 0)
+				{ // mouse wheel was rotated up/away from the user
 					int iNewValue = slider.getValue() - slider.getMinorTickSpacing();
-					if (iNewValue >= slider.getMinimum()) {
+					if (iNewValue >= slider.getMinimum())
+					{
 						slider.setValue(iNewValue);
-					} else
+					}
+					else
 						slider.setValue(0);
-				} else {
+				}
+				else
+				{
 					int iNewValue = slider.getValue() + slider.getMinorTickSpacing();
-					if (iNewValue <= slider.getMaximum()) {
+					if (iNewValue <= slider.getMaximum())
+					{
 						slider.setValue(iNewValue);
-					} else
+					}
+					else
 						slider.setValue(slider.getMaximum());
 				}
 			}
@@ -256,11 +236,16 @@ public class GUI extends JFrame {
 		JButton btnPosDep = new JButton("Position Initiale");
 		btnPosDep.setBackground(new Color(39, 39, 39));
 		btnPosDep.setForeground(new Color(138, 202, 206));
-		btnPosDep.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
+		btnPosDep.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
+				try
+				{
 					new Circle(browser, txtLAT, txtLONG, slider);
-				} catch (Exception ex) {
+				}
+				catch (Exception ex)
+				{
 					System.out.println("Execption " + ex.getMessage());
 				}
 			}
@@ -275,8 +260,10 @@ public class GUI extends JFrame {
 		JButton btnRayon = new JButton("Zone de Recherche");
 		btnRayon.setBackground(new Color(39, 39, 39));
 		btnRayon.setForeground(new Color(138, 202, 206));
-		btnRayon.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		btnRayon.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 			}
 		});
 		GridBagConstraints gbc_btnRayon = new GridBagConstraints();
@@ -288,7 +275,7 @@ public class GUI extends JFrame {
 
 		// //////////////////////////////////////////////////////////
 		// BTN Creation du POI (point of interest)
-		// JButton btnGenerateStations = new JButton("Generate Stations");
+		JButton btnGenerateStations = new JButton("Generate Stations");
 		GridBagConstraints gbc_setMarkerButton = new GridBagConstraints();
 		gbc_setMarkerButton.fill = GridBagConstraints.BOTH;
 		gbc_setMarkerButton.insets = new Insets(0, 0, 5, 0);
@@ -297,53 +284,27 @@ public class GUI extends JFrame {
 		navigationBar.add(btnGenerateStations, gbc_setMarkerButton);
 		btnGenerateStations.setBackground(new Color(39, 39, 39));
 		btnGenerateStations.setForeground(new Color(138, 202, 206));
-		btnGenerateStations.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
+		btnGenerateStations.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
 					JavaScript.deleteStations(browser); // Suppression des
 														// anciennes stations
 														// eventuelles
-
-					ListeStations = null;
-					ListeStationsDAO = null;
-
-					String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-					System.out.println("Debut Test n∞1 @ " + timeStamp);
-
-					// recuperation des donnÈes input
-					Recherche recherche = new Recherche();
-					GestionRecherche grecherche = new GestionRecherche();
-					Critere critere = new Critere();
-					Point position = new Point();
-					Coordonnees coordonnee = new Coordonnees();
-					coordonnee.setLatitude(Double.parseDouble(txtLAT.getText()));
-					coordonnee.setLongitude(Double.parseDouble(txtLONG.getText()));
-					position.setCoordonnee(coordonnee);
-					critere.setPosition(position);
-					recherche.setCritere(critere);
-					critere.setRayon(slider.getValue());
-					System.out.println(critere.getRayon());
-					System.out.println(coordonnee.getLongitude());
-					System.out.println(coordonnee.getLatitude());
-
-					int i = 0;
-					// Initialisation de liste
-					try {
-						ListeStationsDAO = grecherche.recupereStations(recherche);
-
-					} catch (Exception ex) {
-						// ex.printStackTrace();
-						ex.getStackTrace();
-					}
-
-					ListeStations = XMLParser.GenerateStationBDD(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
-
-					timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-					System.out.println("Fin Test n∞1 @ " + timeStamp);
-
-				} catch (Exception ex) {
-					// System.out.println("Execption " + ex.getMessage());
-					// ex.printStackTrace();
+					// XMLParser.GenerateStationFromCSV(browser, txtLAT,
+					// txtLONG, slider, ListeStations); // Generation des
+					// Markers des stations
+					XMLParser.GenerateStationBDD(browser, txtLAT, txtLONG, slider, ListeStations); // Generation
+																									// des
+																									// Markers
+																									// des
+																									// stations
+				}
+				catch (Exception ex)
+				{
+					System.out.println("Execption " + ex.getMessage());
 				}
 			}
 		});
@@ -359,15 +320,18 @@ public class GUI extends JFrame {
 		navigationBar.add(btnDeleteStations, gbc_btnDeleteStations);
 		btnDeleteStations.setForeground(new Color(138, 202, 206));
 		btnDeleteStations.setBackground(new Color(39, 39, 39));
-		btnDeleteStations.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
+		btnDeleteStations.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
 					ListeStations.clear();
-					tabListe.removeAll();
-					tabListe.repaint();
 					JavaScript.deleteStations(browser); // suppression des
 														// points Stations
-				} catch (Exception ex) {
+				}
+				catch (Exception ex)
+				{
 					System.out.println("Execption " + ex.getMessage());
 				}
 			}
@@ -429,8 +393,8 @@ public class GUI extends JFrame {
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FENETRE LISTE DES STATIONS
 
+		JPanel tabListe = new JPanel();
 		JScrollPane scrb = new JScrollPane(tabListe);
-		scrb.setBorder(null);
 		tabListe.setBackground(Color.BLACK); // Couleur de test visuel - ÔøΩ
 												// supprimer plus tard
 		// tabListe.setBackground(new Color(39, 39, 39));
@@ -453,6 +417,82 @@ public class GUI extends JFrame {
 		gbc_label.gridy = 0;
 		tabListe.add(label, gbc_label);
 
+		/*
+		 * JPanel tabListe = new JPanel(); tabListe.setBackground(Color.BLACK);
+		 * //Couleur de test visuel - ÔøΩ supprimer plus tard
+		 * //tabListe.setBackground(new Color(39, 39, 39));
+		 * myCards.add("Liste_Stations", tabListe); GridBagLayout gbl_tabListe =
+		 * new GridBagLayout(); gbl_tabListe.columnWidths = new int[]{15, 945,
+		 * 0, 0}; gbl_tabListe.rowHeights = new int[]{15, 177, 0, 46, 0, 46, 0};
+		 * gbl_tabListe.columnWeights = new double[]{0.0, 0.0, 0.0,
+		 * Double.MIN_VALUE}; gbl_tabListe.rowWeights = new double[]{0.0, 0.0,
+		 * 0.0, 1.0, 0.0, 1.0, Double.MIN_VALUE};
+		 * tabListe.setLayout(gbl_tabListe);
+		 */
+
+		/*
+		 * //Frame Station JPanel blocBox = new JPanel();
+		 * blocBox.setBackground(Color.BLACK); GridBagConstraints gbc_blocBox =
+		 * new GridBagConstraints(); gbc_blocBox.insets = new Insets(0, 0, 5,
+		 * 5); gbc_blocBox.fill = GridBagConstraints.BOTH; gbc_blocBox.gridx =
+		 * 1; gbc_blocBox.gridy = 1; tabListe.add(blocBox, gbc_blocBox);
+		 * blocBox.setLayout(new BorderLayout(0, 0));
+		 * 
+		 * JLabel top = new JLabel(""); top.setIcon(new
+		 * ImageIcon(GUI.class.getResource(
+		 * "/Data/HTML/img/FrameBoxListe/NorthFrameBox.png"))); blocBox.add(top,
+		 * BorderLayout.NORTH);
+		 * 
+		 * JLabel label = new JLabel(""); label.setIcon(new
+		 * ImageIcon(GUI.class.getResource(
+		 * "/Data/HTML/img/FrameBoxListe/SouthFrameBox.png")));
+		 * blocBox.add(label, BorderLayout.SOUTH);
+		 * 
+		 * JLabel label_1 = new JLabel(""); label_1.setIcon(new
+		 * ImageIcon(GUI.class.getResource(
+		 * "/Data/HTML/img/FrameBoxListe/WestFrameBox.png")));
+		 * blocBox.add(label_1, BorderLayout.WEST);
+		 * 
+		 * JLabel lblNewLabel_1 = new JLabel(""); lblNewLabel_1.setIcon(new
+		 * ImageIcon(GUI.class.getResource(
+		 * "/Data/HTML/img/FrameBoxListe/EastFrameBox.png")));
+		 * blocBox.add(lblNewLabel_1, BorderLayout.EAST);
+		 * 
+		 * JPanel panel_3 = new JPanel(); panel_3.setBackground(Color.BLACK);
+		 * blocBox.add(panel_3, BorderLayout.CENTER); GridBagLayout gbl_panel_3
+		 * = new GridBagLayout(); gbl_panel_3.columnWidths = new int[]{79, 131,
+		 * 485, 244, 0}; gbl_panel_3.rowHeights = new int[]{120, 0};
+		 * gbl_panel_3.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0,
+		 * Double.MIN_VALUE}; gbl_panel_3.rowWeights = new double[]{0.0,
+		 * Double.MIN_VALUE}; panel_3.setLayout(gbl_panel_3);
+		 * 
+		 * JLabel distance = new JLabel("< 500m");
+		 * distance.setForeground(Color.GRAY); distance.setFont(new
+		 * Font("Tahoma", Font.BOLD, 20)); GridBagConstraints gbc_distance = new
+		 * GridBagConstraints(); gbc_distance.insets = new Insets(0, 0, 0, 5);
+		 * gbc_distance.gridx = 0; gbc_distance.gridy = 0; panel_3.add(distance,
+		 * gbc_distance);
+		 * 
+		 * JLabel logo = new JLabel(""); logo.setIcon(new
+		 * ImageIcon(GUI.class.getResource("/Data/HTML/img/Agip_logomini.png")))
+		 * ; GridBagConstraints gbc_logo = new GridBagConstraints();
+		 * gbc_logo.insets = new Insets(0, 0, 0, 5); gbc_logo.gridx = 1;
+		 * gbc_logo.gridy = 0; panel_3.add(logo, gbc_logo);
+		 * 
+		 * JLabel info = new JLabel(
+		 * "Station-Service AGIP \r\n544 Rue Paul Rimbaud \r\n04.67.63.08.18 ");
+		 * info.setForeground(Color.GRAY); info.setFont(new Font("Tahoma",
+		 * Font.BOLD, 14)); GridBagConstraints gbc_info = new
+		 * GridBagConstraints(); gbc_info.insets = new Insets(0, 0, 0, 5);
+		 * gbc_info.gridx = 2; gbc_info.gridy = 0; panel_3.add(info, gbc_info);
+		 * 
+		 * JLabel prix = new JLabel("1.33 euros");
+		 * prix.setForeground(Color.WHITE); prix.setFont(new Font("Tahoma",
+		 * Font.PLAIN, 28)); GridBagConstraints gbc_prix = new
+		 * GridBagConstraints(); gbc_prix.gridx = 3; gbc_prix.gridy = 0;
+		 * panel_3.add(prix, gbc_prix); // Fin Frame Station
+		 */
+
 		// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// FENETRE STATISTIQUES
 		JPanel tabStat = new JPanel();
@@ -473,8 +513,10 @@ public class GUI extends JFrame {
 		btnCarte.setForeground(new Color(138, 202, 206));
 		btnCarte.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		btnCarte.setPreferredSize(new Dimension(200, 40));
-		btnCarte.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnCarte.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
 				myCardLayout.show(myCards, "Carte");
 			}
 		});
@@ -490,37 +532,42 @@ public class GUI extends JFrame {
 		btnListeStations.setForeground(new Color(138, 202, 206));
 		btnListeStations.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		btnListeStations.setPreferredSize(new Dimension(200, 40));
-		btnListeStations.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnListeStations.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
 				// Affichage du panneau Liste des Stations
 				myCardLayout.show(myCards, "Liste_Stations");
-				// Recuperation des donnÔøΩes du tableau listeStations issues de
+				// Recuperation des donn√©es du tableau listeStations issues de
 				// l'import du fichier xml-csv ou db (pour l'instant issue de la
 				// fonction XMLParser )
-				if (ListeStations.size() > 0) {
+				if (ListeStations.size() > 0)
+				{
 					System.out.println(ListeStations.size());
 					int index = 0;
-					for (String[] station : ListeStations) {
-						System.out.println("-> Num " + ++index + " | Station ID : " + station[0] + " | Adresse : "
+					for (String[] station : ListeStations)
+					{
+						System.out.println("-> N¬∞ " + ++index + " | Station ID : " + station[0] + " | Adresse : "
 								+ station[1] + " | Code Postal : " + station[2] + " | Ville : " + station[3]
 								+ " | Lat : " + station[4] + " | Long : " + station[5]);
 					}
 					System.out.println(">>> End of process [OK]");
 
-					int indexTabList = 1;
-					/*
-					 * for (int i = 0; i < ListeStations.size(); i++) { new
-					 * FrameStation(tabListe, indexTabList); indexTabList++; }
-					 */
-					for (String[] station : ListeStations) {
-
-						new FrameStation(tabListe, indexTabList, station[1], station[2], station[3]);
-						indexTabList++;
-
-					}
-
-				} else {
-					System.out.println(">>> La liste des staions est vide !!!");
+					int indexTabList = 1;				
+					
+												
+							for (String[] station : ListeStations)
+						{
+							
+							new InsertStationFrame(tabListe, indexTabList,station[1],station[2],station[3]);
+							indexTabList++;
+							
+						}
+					
+				}
+				else
+				{
+					System.out.println(">>> La liste des stations est vide !!!");
 				}
 			}
 		});
@@ -536,65 +583,11 @@ public class GUI extends JFrame {
 		btnInfos.setForeground(new Color(138, 202, 206));
 		btnInfos.setFont(new Font("Tahoma", Font.PLAIN, 36));
 		btnInfos.setPreferredSize(new Dimension(200, 40));
-		btnInfos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		btnInfos.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
 				myCardLayout.show(myCards, "Statistiques");
-
-				/*
-				 * System.out.println(""); // Test Temporaire de calcul de
-				 * coordonnÈes gÈographique // Point de Depart double latOrigine
-				 * = Double.parseDouble(txtLAT.getText());// 43.610769; double
-				 * lngOrigine = Double.parseDouble(txtLONG.getText());//
-				 * 3.876622;
-				 * 
-				 * // Calcul des coordonnÈes d'un point par methode polaire (Lat
-				 * // DÈpart, Long DÈpart , Distance en km)
-				 * com.processing.Borders border =
-				 * GeoProcessing.getWGS84FrameLimits(latOrigine, lngOrigine,
-				 * slider.getValue());
-				 * 
-				 * // Recuperation des donnÈes // Border Nord Ouest
-				 * System.out.println("Point Nord Ouest"); System.out.println(
-				 * "Lat >>> " + border.getBorderNO().getLatitude() + " ou " +
-				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().
-				 * getLatitude())); System.out.println("Long>>> " +
-				 * border.getBorderNO().getLongitude() + " ou " +
-				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().
-				 * getLongitude())); // Controle double distNO =
-				 * GeoProcessing.getDistance(latOrigine, lngOrigine,
-				 * border.getBorderNO().getLatitude(),
-				 * border.getBorderNO().getLongitude()); System.out.println(
-				 * "Distance (km): " + distNO); double azmNO =
-				 * GeoProcessing.getAzimuth(latOrigine, lngOrigine,
-				 * border.getBorderNO().getLatitude(),
-				 * border.getBorderNO().getLongitude()); System.out.println(
-				 * "Azimuth (Deg): " + azmNO);
-				 * 
-				 * System.out.println("");
-				 * 
-				 * // Border Sud Est System.out.println("Point Sud Est");
-				 * System.out.println("Lat >>> " +
-				 * border.getBorderSE().getLatitude() + " ou " +
-				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().
-				 * getLatitude())); System.out.println("Long>>> " +
-				 * border.getBorderSE().getLongitude() + " ou " +
-				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().
-				 * getLongitude())); // Controle double distSE =
-				 * GeoProcessing.getDistance(latOrigine, lngOrigine,
-				 * border.getBorderSE().getLatitude(),
-				 * border.getBorderSE().getLongitude()); System.out.println(
-				 * "Distance (km): " + distSE); double azmSE =
-				 * GeoProcessing.getAzimuth(latOrigine, lngOrigine,
-				 * border.getBorderSE().getLatitude(),
-				 * border.getBorderSE().getLongitude()); System.out.println(
-				 * "Azimuth (Deg): " + azmSE); System.out.println("");
-				 * 
-				 * // Test Conversion double conversion =
-				 * GeoProcessing.convert_DegSEXA_to_DegDEC(
-				 * "23∞12\'34.56023455300001\"");
-				 * System.out.println(conversion);
-				 */
-
 			}
 		});
 		GridBagConstraints gbc_btnInfos = new GridBagConstraints();
@@ -609,9 +602,12 @@ public class GUI extends JFrame {
 		JButton zoomInButton = new JButton("Zoom In");
 		zoomInButton.setBackground(new Color(39, 39, 39));
 		zoomInButton.setForeground(new Color(138, 202, 206));
-		zoomInButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (zoomValue < MAX_ZOOM) {
+		zoomInButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (zoomValue < MAX_ZOOM)
+				{
 					browser.executeJavaScript("map.setZoom(" + ++zoomValue + ")");
 				}
 			}
@@ -620,9 +616,12 @@ public class GUI extends JFrame {
 		JButton zoomOutButton = new JButton("Zoom Out");
 		zoomOutButton.setBackground(new Color(39, 39, 39));
 		zoomOutButton.setForeground(new Color(138, 202, 206));
-		zoomOutButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (zoomValue > MIN_ZOOM) {
+		zoomOutButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (zoomValue > MIN_ZOOM)
+				{
 					browser.executeJavaScript("map.setZoom(" + --zoomValue + ")");
 				}
 			}

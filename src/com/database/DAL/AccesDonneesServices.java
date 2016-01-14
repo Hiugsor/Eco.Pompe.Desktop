@@ -12,7 +12,7 @@ public class AccesDonneesServices {
 	 */
 	public static void insertServices(List<String> noms){
 		
-		String requete ="INSERT INTO ecopompe.services (types_services) VALUES(?)";
+		String requete ="INSERT INTO services (types_services) VALUES(?)";
 		//int[] count= new int[0];
 
 		
@@ -33,8 +33,6 @@ public class AccesDonneesServices {
 			sqle.printStackTrace();
 		}
 		//ResultSet resultat = null;
-		
-
 	}
 	
 }

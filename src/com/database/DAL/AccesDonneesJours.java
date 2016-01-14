@@ -1,25 +1,22 @@
 package com.database.DAL;
 import java.sql.*;
 import java.util.*;
-public class AccesDonneesCarburants {
+public class AccesDonneesJours {
 
-	private AccesDonneesCarburants()
+	private AccesDonneesJours()
 	{}
 
-	/**
-	 * Insert all carburant in carburants table
-	 * @param noms
-	 */
-	public static void insertCarburants(List<String> carbus){
+	
+	public static void insertJours(List<String> jours){
 		
-		String requete ="INSERT INTO carburants (nom) VALUES(?)";
+		String requete ="INSERT INTO jours (jour) VALUES(?)";
 		
 		Connection connection = ConnexionManager.GetInstance().GetConnection();
 		
 		try {
 			PreparedStatement requeteSql = connection.prepareStatement(requete);
-			for (String nom : carbus) {
-				requeteSql.setString(1, nom);
+			for (String jour : jours) {
+				requeteSql.setString(1, jour);
 				requeteSql.addBatch();
 
 			}
