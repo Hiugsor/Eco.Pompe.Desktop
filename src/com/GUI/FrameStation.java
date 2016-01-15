@@ -51,7 +51,7 @@ public class FrameStation {
 		panel_3.setBackground(Color.BLACK);
 		blocBox.add(panel_3, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_3 = new GridBagLayout();
-		gbl_panel_3.columnWidths = new int[]{79, 131, 485, 244, 0};
+		gbl_panel_3.columnWidths = new int[]{79, 131, 485, 239, 0};
 		gbl_panel_3.rowHeights = new int[]{120, 0};
 		gbl_panel_3.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_panel_3.rowWeights = new double[]{0.0, Double.MIN_VALUE};
