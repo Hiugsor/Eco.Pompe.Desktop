@@ -78,9 +78,9 @@ public class FrameStation {
 		
 		JLabel info = new JLabel("<html><h2>"+ station.getNom() +"</h2>"+ station.getAdresse().getRue() + "<BR>" + station.getAdresse().getCodepostal() + " "+ station.getAdresse().getVille() + "</html>");
 		info.setForeground(Color.GRAY);
-		info.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+		info.setFont(new Font("Tahoma", Font.BOLD, 14));		
 		GridBagConstraints gbc_info = new GridBagConstraints();
+		gbc_info.anchor = GridBagConstraints.WEST;
 		gbc_info.insets = new Insets(0, 0, 0, 5);
 		gbc_info.gridx = 2;
 		gbc_info.gridy = 0;
