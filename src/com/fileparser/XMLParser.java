@@ -14,7 +14,6 @@ import com.teamdev.jxbrowser.chromium.Browser;
 
 import com.api.googlemaps.Marker;
 import com.bo.Station;
-import com.dao.StationDao;
 import com.processing.GeoProcessing_xtof;
 
 public class XMLParser {
@@ -169,10 +168,27 @@ public class XMLParser {
 							st.getId().toString(), st.getAdresse().getRue(),
 							st.getAdresse().getCodepostal(), st.getAdresse().getVille());
 					// Creation d'un tableau des infos station
-					String[] station = new String[] { st.getId().toString(), st.getAdresse().getRue(),
-							st.getAdresse().getCodepostal(), st.getAdresse().getVille(),
+					String[] station = new String[] 
+					{ 		st.getId().toString(), 
+							st.getAdresse().getRue(),
+							st.getAdresse().getCodepostal(),
+							st.getAdresse().getVille(),
 							st.getAdresse().getPosition().getCoordonnee().getLatitude().toString(),
-							st.getAdresse().getPosition().getCoordonnee().getLongitude().toString() };
+							st.getAdresse().getPosition().getCoordonnee().getLongitude().toString(),
+							st.getNom()
+							
+							/*,st.getAdresse().getPosition().getDistance(),
+							st.getCarburants().get(0).getNom(),
+							st.getCarburants().get(0).getPrix()
+							*/
+							//les carburants ???
+							
+					};
+					//String[] stationt = new String[2];
+					//String[] stationtt = new String[2];
+					
+					
+					
 					// Ajout du tableau dans la liste des Stations					
 					StationsExport.add(station);
 			}

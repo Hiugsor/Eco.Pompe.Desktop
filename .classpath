@@ -32,6 +32,6 @@
 	<classpathentry kind="lib" path="lib/EcoPompe Framework/mysql-connector-java-5.1.6.jar"/>
 	<classpathentry kind="lib" path="lib/EcoPompe Framework/okhttp-2.7.0.jar"/>
 	<classpathentry kind="lib" path="lib/EcoPompe Framework/okio-1.6.0.jar"/>
-	<classpathentry kind="lib" path="lib/EcoPompe Framework/ecopompe-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/ecopompe-2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
