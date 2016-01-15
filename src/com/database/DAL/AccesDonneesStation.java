@@ -61,7 +61,7 @@ public class AccesDonneesStation {
 
 			if (!pdv[0].equals("id")) {
 				idPdv = Integer.parseInt(pdv[0]);
-				//integration des noms généré aléatoirement
+				//integration des noms gï¿½nï¿½rï¿½ alï¿½atoirement
 				nbrand = rand.nextInt(nomStations.size()-2)+1;
 				nom  = nomStations.get(nbrand);
 				adresse = pdv[1];
@@ -130,13 +130,13 @@ public class AccesDonneesStation {
 
 				if(!proposer.isEmpty()){
 				System.out.println(idStation);
-				AccesDonneesProposer.insertProposer(idStation, traitementString.recupererDonnées(proposer, "/"));
+				AccesDonneesProposer.insertProposer(idStation, traitementString.recupererDonnÃ©es(proposer, "/"));
 				//System.out.println("poposer OK !!");
 				}
 				if(!jNonTravailler.isEmpty()){
 				//System.out.println(idStation);
 				//System.out.println("Travailler !!");
-				AccesDonneesNonTravailler.insertNonTravailler(idStation, traitementString.recupererDonnées(jNonTravailler, "/"));
+				AccesDonneesNonTravailler.insertNonTravailler(idStation, traitementString.recupererDonnÃ©es(jNonTravailler, "/"));
 				//System.out.println("jNontravailler OK !!");
 				}
 				if(!vendre.isEmpty()){

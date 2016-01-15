@@ -13,10 +13,12 @@ import org.jdom2.input.DOMBuilder;
 import com.teamdev.jxbrowser.chromium.Browser;
 
 import com.api.googlemaps.Marker;
+import com.bo.Carburant;
 import com.bo.Station;
 import com.processing.GeoProcessing_xtof;
 
-public class XMLParser {
+public class XMLParser
+{
 
 	// [Attributs]
 	static String workingDir = System.getProperty("user.dir");
@@ -34,23 +36,27 @@ public class XMLParser {
 	 * @param browser
 	 */
 	public static void GenerateStationFromCSV(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider,
-			List<String[]> ListeStations) {
+			List<String[]> ListeStations)
+	{
 		// >>> Déclarations
 		CsvFileRead csvFile;
 		List<String[]> lines;
 		int counter = 0;
 		ListeStations.clear();
 
-		try {
+		try
+		{
 			// >>> Lecture du Fichier csv
 			csvFile = new CsvFileRead(new File(workingDir + "\\src\\Data\\XML\\PrixCarburants_quotidien_20151214.csv"));
 			lines = csvFile.getData();
 
-			for (String[] column : lines) {
+			for (String[] column : lines)
+			{
 				// >>> Contr�les des donn�es 1/4 - V�rification Si
 				// CodePostal
 				// Vide
-				if (column[3].length() == 0) {
+				if (column[3].length() == 0)
+				{
 					column[3] = "0";
 				}
 				// int cp = Integer.parseInt(column[3]);
@@ -58,18 +64,24 @@ public class XMLParser {
 				// >>> Contr�les des donn�es 2/4 - V�rification de valeurs
 				// vides
 				// sur les latitudes & les longitudes
-				if (column[1].length() == 0 && column[2].length() != 0) {
+				if (column[1].length() == 0 && column[2].length() != 0)
+				{
 					column[1] = "0";
-				} else if (column[2].length() == 0 && column[1].length() != 0) {
+				}
+				else if (column[2].length() == 0 && column[1].length() != 0)
+				{
 					column[2] = "0";
-				} else if (column[1].length() == 0 && column[2].length() == 0) {
+				}
+				else if (column[1].length() == 0 && column[2].length() == 0)
+				{
 					column[1] = column[2] = "0";
 				}
 
 				// >>> Contr�les des donn�es 3/4 - Suppression du premier
 				// espace
 				// dans l'adresse.
-				if (column[4].substring(0, 1).contains(" ")) {
+				if (column[4].substring(0, 1).contains(" "))
+				{
 					column[4] = column[4].substring(1, (column[4].length()));
 				}
 
@@ -78,8 +90,10 @@ public class XMLParser {
 				// lat-long dans le fichier csv
 				double lat = Double.parseDouble(column[1]) / 100000;
 				double lng = Double.parseDouble(column[2]) / 100000;
-				if ((lat < lng)) {
-					if (longMin <= lat && lat <= longMax && latMin <= lng && lng <= latMax) {
+				if ((lat < lng))
+				{
+					if (longMin <= lat && lat <= longMax && latMin <= lng && lng <= latMax)
+					{
 						lat = Double.parseDouble(column[2]) / 100000;
 						lng = Double.parseDouble(column[1]) / 100000;
 					}
@@ -87,10 +101,12 @@ public class XMLParser {
 
 				// >>> Cr�ation des Markers sous conditions d'�tre dans les
 				// limites g�ographiques de la france et corse
-				if (latMin <= lat && lat <= latMax && longMin <= lng && lng <= longMax) {
+				if (latMin <= lat && lat <= latMax && longMin <= lng && lng <= longMax)
+				{
 					double distance = GeoProcessing_xtof.getDistance(Double.parseDouble(txtLat.getText()),
 							Double.parseDouble(txtLong.getText()), lat, lng);
-					if (distance <= slider.getValue()) {
+					if (distance <= slider.getValue())
+					{
 						// cr�ation du marker
 						new Marker(browser, lat, lng, column[0], column[4], column[3], column[5]);
 						// Creation d'un tableau des infos station
@@ -104,19 +120,23 @@ public class XMLParser {
 			}
 			System.out.println(">>> Nb de Stations inserées dans la ListeStations : " + ListeStations.size());
 			System.out.println(">>> Job Done ! with " + counter + " stations imported. [Good]");
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println(">>> Execption " + /* e.getMessage()) + */ e.getStackTrace());
 		}
 	}
 
 	/**
-	 * Methode d"analyse d'un fichier XML [� retravailler en focntion du code
-	 * de traitement de la methode GenerateStationFromCSV()]
+	 * Methode d"analyse d'un fichier XML [� retravailler en focntion du code de
+	 * traitement de la methode GenerateStationFromCSV()]
 	 * 
 	 * @param browser
 	 */
-	public static void GenerateStationFromXML(Browser browser) {
-		try {
+	public static void GenerateStationFromXML(Browser browser)
+	{
+		try
+		{
 			int counter = 0; // Compteur des Markers
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -128,11 +148,13 @@ public class XMLParser {
 			Element root = doc.getRootElement();
 			List row = root.getChildren("pdv");
 
-			for (int i = 0; i < row.size(); i++) {
+			for (int i = 0; i < row.size(); i++)
+			{
 				Element pdv = (Element) row.get(i);
 				String idPdv = pdv.getAttribute("id").getValue();
 				int cpPdv = Integer.parseInt(pdv.getAttribute("cp").getValue());
-				if (30000 <= cpPdv && cpPdv < 35000) {
+				if (30000 <= cpPdv && cpPdv < 35000)
+				{
 					double latitudePdv = Double.parseDouble(pdv.getAttribute("latitude").getValue()) / 100000;
 					double longitudePdv = Double.parseDouble(pdv.getAttribute("longitude").getValue()) / 100000;
 					browser.executeJavaScript(
@@ -144,7 +166,9 @@ public class XMLParser {
 				}
 			}
 			System.out.println(counter);
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			System.out.println("Execption " + e.getMessage());
 
 		}
@@ -152,47 +176,23 @@ public class XMLParser {
 
 	}// [End Method]
 
-	public static List<String[]> GenerateStationBDD(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider,
+	public static void CreateMarkerFromBdd(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider,
 			ArrayList<Station> ListeStations)
 	{
-		
-		List<String[]> StationsExport = new ArrayList<String[]>();
-		
+
 		if (ListeStations != null)
 		{
 			for (Station st : ListeStations)
-			{				
-					// creation du marker
-					new Marker(browser, st.getAdresse().getPosition().getCoordonnee().getLatitude(),
-							st.getAdresse().getPosition().getCoordonnee().getLongitude(),
-							st.getId().toString(), st.getAdresse().getRue(),
-							st.getAdresse().getCodepostal(), st.getAdresse().getVille());
-					// Creation d'un tableau des infos station
-					String[] station = new String[] 
-					{ 		st.getId().toString(), 
-							st.getAdresse().getRue(),
-							st.getAdresse().getCodepostal(),
-							st.getAdresse().getVille(),
-							st.getAdresse().getPosition().getCoordonnee().getLatitude().toString(),
-							st.getAdresse().getPosition().getCoordonnee().getLongitude().toString(),
-							st.getNom()
-							
-							/*,st.getAdresse().getPosition().getDistance(),
-							st.getCarburants().get(0).getNom(),
-							st.getCarburants().get(0).getPrix()
-							*/
-							//les carburants ???
-							
-					};
-					//String[] stationt = new String[2];
-					//String[] stationtt = new String[2];
-					
-					
-					
-					// Ajout du tableau dans la liste des Stations					
-					StationsExport.add(station);
+			{
+				// creation du marker
+				new Marker(browser, st.getAdresse().getPosition().getCoordonnee().getLatitude(),
+						st.getAdresse().getPosition().getCoordonnee().getLongitude(), st.getId().toString(),
+						st.getAdresse().getRue(), st.getAdresse().getCodepostal(), st.getAdresse().getVille());
+
 			}
+			;
+
 		}
-			return StationsExport;
+
 	}
 }// [End Class]

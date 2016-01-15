@@ -191,7 +191,7 @@ public class GUI extends JFrame {
 
 				// Rexecute btn Genaration des stations
 				btnGenerateStations.doClick();
-				XMLParser.GenerateStationBDD(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
+				XMLParser.CreateMarkerFromBdd(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
 			}
 
 			@Override
@@ -308,38 +308,26 @@ public class GUI extends JFrame {
 					ListeStationsDAO = null;
 
 					String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-					System.out.println("Debut Test n°1 @ " + timeStamp);
+					System.out.println("Debut Test nï¿½1 @ " + timeStamp);
 
-					// recuperation des données input
-					Recherche recherche = new Recherche();
+					// recuperation des donnï¿½es input
 					GestionRecherche grecherche = new GestionRecherche();
-					Critere critere = new Critere();
-					Point position = new Point();
-					Coordonnees coordonnee = new Coordonnees();
-					coordonnee.setLatitude(Double.parseDouble(txtLAT.getText()));
-					coordonnee.setLongitude(Double.parseDouble(txtLONG.getText()));
-					position.setCoordonnee(coordonnee);
-					critere.setPosition(position);
-					recherche.setCritere(critere);
-					critere.setRayon(slider.getValue());
-					System.out.println(critere.getRayon());
-					System.out.println(coordonnee.getLongitude());
-					System.out.println(coordonnee.getLatitude());
-
 					int i = 0;
 					// Initialisation de liste
 					try {
-						ListeStationsDAO = grecherche.recupereStations(recherche);
-
+						//ListeStationsDAO = grecherche.recupereStations(recherche);
+						
+						ListeStationsDAO = grecherche.recupereStations(Double.parseDouble(txtLAT.getText()),Double.parseDouble(txtLONG.getText()),slider.getValue());
+						
 					} catch (Exception ex) {
 						// ex.printStackTrace();
 						ex.getStackTrace();
 					}
 
-					ListeStations = XMLParser.GenerateStationBDD(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
+					XMLParser.CreateMarkerFromBdd(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
 
 					timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-					System.out.println("Fin Test n°1 @ " + timeStamp);
+					System.out.println("Fin Test nï¿½1 @ " + timeStamp);
 
 				} catch (Exception ex) {
 					// System.out.println("Execption " + ex.getMessage());
@@ -497,14 +485,15 @@ public class GUI extends JFrame {
 				// Recuperation des donnï¿½es du tableau listeStations issues de
 				// l'import du fichier xml-csv ou db (pour l'instant issue de la
 				// fonction XMLParser )
-				if (ListeStations.size() > 0) {
-					System.out.println(ListeStations.size());
+				if (ListeStationsDAO.size() > 0) {
+					System.out.println(ListeStationsDAO.size());
 					int index = 0;
-					for (String[] station : ListeStations) {
+					/*for (Station station : ListeStationsDAO) {
+						
 						System.out.println("-> Num " + ++index + " | Station ID : " + station[0] + " | Adresse : "
 								+ station[1] + " | Code Postal : " + station[2] + " | Ville : " + station[3]
 								+ " | Lat : " + station[4] + " | Long : " + station[5]);
-					}
+					}*/
 					System.out.println(">>> End of process [OK]");
 
 					int indexTabList = 1;
@@ -512,9 +501,9 @@ public class GUI extends JFrame {
 					 * for (int i = 0; i < ListeStations.size(); i++) { new
 					 * FrameStation(tabListe, indexTabList); indexTabList++; }
 					 */
-					for (String[] station : ListeStations) {
+					for (Station station : ListeStationsDAO) {
 
-						new FrameStation(tabListe, indexTabList, station[1], station[2], station[3]);
+						new FrameStation(tabListe, indexTabList,  station);
 						indexTabList++;
 
 					}
@@ -542,18 +531,18 @@ public class GUI extends JFrame {
 
 				/*
 				 * System.out.println(""); // Test Temporaire de calcul de
-				 * coordonnées géographique // Point de Depart double latOrigine
+				 * coordonnï¿½es gï¿½ographique // Point de Depart double latOrigine
 				 * = Double.parseDouble(txtLAT.getText());// 43.610769; double
 				 * lngOrigine = Double.parseDouble(txtLONG.getText());//
 				 * 3.876622;
 				 * 
-				 * // Calcul des coordonnées d'un point par methode polaire (Lat
-				 * // Départ, Long Départ , Distance en km)
+				 * // Calcul des coordonnï¿½es d'un point par methode polaire (Lat
+				 * // Dï¿½part, Long Dï¿½part , Distance en km)
 				 * com.processing.Borders border =
 				 * GeoProcessing.getWGS84FrameLimits(latOrigine, lngOrigine,
 				 * slider.getValue());
 				 * 
-				 * // Recuperation des données // Border Nord Ouest
+				 * // Recuperation des donnï¿½es // Border Nord Ouest
 				 * System.out.println("Point Nord Ouest"); System.out.println(
 				 * "Lat >>> " + border.getBorderNO().getLatitude() + " ou " +
 				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().
@@ -591,7 +580,7 @@ public class GUI extends JFrame {
 				 * 
 				 * // Test Conversion double conversion =
 				 * GeoProcessing.convert_DegSEXA_to_DegDEC(
-				 * "23°12\'34.56023455300001\"");
+				 * "23ï¿½12\'34.56023455300001\"");
 				 * System.out.println(conversion);
 				 */
 

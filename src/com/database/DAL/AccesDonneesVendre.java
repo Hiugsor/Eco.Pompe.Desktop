@@ -57,9 +57,9 @@ public class AccesDonneesVendre {
 
 		//remplissage de la table non vendre
 		try {
-			//String colonne= "Gazole,1,2015-12-10T10:12:48,1027/SP95,2,2015-12-10T10:12:48,1259"; // a récuperer du fichier CSV
+			//String colonne= "Gazole,1,2015-12-10T10:12:48,1027/SP95,2,2015-12-10T10:12:48,1259"; // a rï¿½cuperer du fichier CSV
 			//int idStation = 9999999; // a modifier
-			List<String> listeCarbus = traitementString.recupererDonnées(colonne, "/");
+			List<String> listeCarbus = traitementString.recupererDonnÃ©es(colonne, "/");
 			//System.out.println("listeCarbus.size"+listeCarbus.size());
 			//if(!listeCarbus.isEmpty()){
 

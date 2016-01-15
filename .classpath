@@ -2,16 +2,19 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/jgoodies-forms.jar" sourcepath="lib/jgoodies-forms-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/Eco.chon/lib/jgoodies-forms-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/jgoodies-common.jar" sourcepath="lib/jgoodies-common-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/Eco.chon/lib/jgoodies-common-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/jgoodies-common-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-common-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-common.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-forms-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-forms-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jgoodies-forms.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/google-maps-services-0.1.9.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/gson-2.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/joda-time-2.9.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/mysql-connector-java-5.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/okhttp-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/okio-1.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/jdbc/com.mysql.jdbc_5.1.5.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/jaxen-1.1.6.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/jdom-2.0.6-contrib.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/jdom-2.0.6-javadoc.jar"/>
@@ -22,16 +25,9 @@
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/xml-apis.jar"/>
-	<classpathentry kind="lib" path="lib/JxBrowser 6/license.jar"/>
-	<classpathentry kind="lib" path="lib/jdbc/com.mysql.jdbc_5.1.5.jar"/>
 	<classpathentry kind="lib" path="lib/JxBrowser 6/jxbrowser-6.0.jar"/>
 	<classpathentry kind="lib" path="lib/JxBrowser 6/jxbrowser-win-6.0.jar"/>
-	<classpathentry kind="lib" path="lib/EcoPompe Framework/google-maps-services-0.1.9.jar"/>
-	<classpathentry kind="lib" path="lib/EcoPompe Framework/gson-2.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/EcoPompe Framework/joda-time-2.9.jar"/>
-	<classpathentry kind="lib" path="lib/EcoPompe Framework/mysql-connector-java-5.1.6.jar"/>
-	<classpathentry kind="lib" path="lib/EcoPompe Framework/okhttp-2.7.0.jar"/>
-	<classpathentry kind="lib" path="lib/EcoPompe Framework/okio-1.6.0.jar"/>
-	<classpathentry kind="lib" path="lib/EcoPompe Framework/ecopompe-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/JxBrowser 6/license.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/ecopompe2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

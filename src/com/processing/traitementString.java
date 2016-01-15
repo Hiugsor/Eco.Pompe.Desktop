@@ -6,7 +6,7 @@ import java.util.List;
 public class traitementString {
 
 	// transformer une chaine en liste de nom
-	public static List<String> recupererDonnées(String colonne, String charSplit) {
+	public static List<String> recupererDonnÃ©es(String colonne, String charSplit) {
 		ArrayList<String> mots = new ArrayList<String>();
 
 		String[] motsCol = colonne.split(charSplit);
@@ -22,7 +22,7 @@ public class traitementString {
 		return mots;
 	}
 
-	public static List<String[]> recupererDonnéesTab(String colonne, String charSplit) {
+	public static List<String[]> recupererDonnÃ©esTab(String colonne, String charSplit) {
 		ArrayList<String[]> mots = new ArrayList<String[]>();
 
 		String[] motsCol = colonne.split(charSplit);

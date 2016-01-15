@@ -11,14 +11,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.bo.Station;
 import com.main.GUI;
 
 public class FrameStation {
 
 	
 	
-	public FrameStation(JPanel  tabListe, int indexTabList, String Adresse, String CP, String Ville)
+	public FrameStation(JPanel  tabListe, int indexTabList, Station station)
 	{
+		//  station.getAdresse().getRue(), station.getAdresse().getCodepostal(),station.getAdresse().getVille()
 		JPanel blocBox = new JPanel();
 		blocBox.setBackground(Color.BLACK);
 		GridBagConstraints gbc_blocBox = new GridBagConstraints();
@@ -55,7 +57,8 @@ public class FrameStation {
 		gbl_panel_3.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panel_3.setLayout(gbl_panel_3);
 		
-		JLabel distance = new JLabel("< 500m");
+		String dist = String.valueOf( Math.round(station.getAdresse().getPosition().getDistance())) + " km";
+		JLabel distance = new JLabel(dist);
 		distance.setForeground(Color.GRAY);
 		distance.setFont(new Font("Tahoma", Font.BOLD, 20));
 		GridBagConstraints gbc_distance = new GridBagConstraints();
@@ -67,21 +70,27 @@ public class FrameStation {
 		JLabel logo = new JLabel("");
 		logo.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/Agip_logomini.png")));
 		GridBagConstraints gbc_logo = new GridBagConstraints();
+		
 		gbc_logo.insets = new Insets(0, 0, 0, 5);
 		gbc_logo.gridx = 1;
 		gbc_logo.gridy = 0;
 		panel_3.add(logo, gbc_logo);
 		
-		JLabel info = new JLabel("<html><h2>"+ "Nom Station" +"</h2>"+ Adresse + "<BR>" + CP + " "+ Ville + "</html>");
+		JLabel info = new JLabel("<html><h2>"+ station.getNom() +"</h2>"+ station.getAdresse().getRue() + "<BR>" + station.getAdresse().getCodepostal() + " "+ station.getAdresse().getVille() + "</html>");
 		info.setForeground(Color.GRAY);
 		info.setFont(new Font("Tahoma", Font.BOLD, 14));
+		
 		GridBagConstraints gbc_info = new GridBagConstraints();
 		gbc_info.insets = new Insets(0, 0, 0, 5);
 		gbc_info.gridx = 2;
 		gbc_info.gridy = 0;
 		panel_3.add(info, gbc_info);
 		
-		JLabel prix = new JLabel("1.33 euros");
+		String prixC = (station.getCarburants() != null && station.getCarburants().size() > 0) ? station.getCarburants().get(0).getPrix().toString(): "NC";
+		Double PrixD = Double.parseDouble(prixC)/1000;
+		prixC = PrixD.toString();
+		
+		JLabel prix = new JLabel(prixC+" €");
 		prix.setForeground(Color.WHITE);
 		prix.setFont(new Font("Tahoma", Font.PLAIN, 28));
 		GridBagConstraints gbc_prix = new GridBagConstraints();
