@@ -441,18 +441,17 @@ public class GUI extends JFrame {
 		gbc_label.gridy = 0;
 		tabListe.add(label, gbc_label);
 
-		// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// FENETRE STATISTIQUES
-		JPanel tabStat = new JPanel();
-		tabStat.setBackground(Color.BLUE); // Couleur de test visuel - �
-											// supprimer plus tard
-		// tabStat.setBackground(new Color(39, 39, 39));
-		myCards.add("Statistiques", tabStat);
-
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// CARDLAYOUT (config)
 		CardLayout myCardLayout = (CardLayout) (myCards.getLayout());
 		frame.getContentPane().add(myCards, BorderLayout.CENTER);
+		
+		JScrollPane scrS = new JScrollPane();
+		myCards.add(scrS, "name_5293621104462");
+		
+		JPanel tabStat = new JPanel();
+		tabStat.setBackground(Color.BLACK);
+		scrS.setViewportView(tabStat);
 
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JBUTTONS (Carte, Liste, Stat)
