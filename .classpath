@@ -25,7 +25,6 @@
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/xalan-2.7.2.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.6/xml-apis.jar"/>
-	<classpathentry kind="lib" path="lib/JxBrowser 6/license.jar"/>
 	<classpathentry kind="lib" path="lib/EcoPompe Framework/ecopompe2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
