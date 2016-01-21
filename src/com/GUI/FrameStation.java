@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.bo.Station;
-import com.main.GUI;
+import com.teamdev.jxbrowser.chromium.demo.JxBrowserDemo;
 
 public class FrameStation {
 
@@ -32,19 +32,19 @@ public class FrameStation {
 		tabListe.add(blocBox, gbc_blocBox);
 		
 		JLabel top = new JLabel("");
-		top.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/NorthFrameBox.png")));
+		top.setIcon(new ImageIcon(JxBrowserDemo.class.getResource("/Data/HTML/img/FrameBoxListe/NorthFrameBox.png")));
 		blocBox.add(top, BorderLayout.NORTH);
 		
 		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/SouthFrameBox.png")));
+		label.setIcon(new ImageIcon(JxBrowserDemo.class.getResource("/Data/HTML/img/FrameBoxListe/SouthFrameBox.png")));
 		blocBox.add(label, BorderLayout.SOUTH);
 		
 		JLabel label_1 = new JLabel("");
-		label_1.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/WestFrameBox.png")));
+		label_1.setIcon(new ImageIcon(JxBrowserDemo.class.getResource("/Data/HTML/img/FrameBoxListe/WestFrameBox.png")));
 		blocBox.add(label_1, BorderLayout.WEST);
 		
 		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/FrameBoxListe/EastFrameBox.png")));
+		lblNewLabel_1.setIcon(new ImageIcon(JxBrowserDemo.class.getResource("/Data/HTML/img/FrameBoxListe/EastFrameBox.png")));
 		blocBox.add(lblNewLabel_1, BorderLayout.EAST);
 		
 		JPanel panel_3 = new JPanel();
@@ -68,7 +68,7 @@ public class FrameStation {
 		panel_3.add(distance, gbc_distance);
 		
 		JLabel logo = new JLabel("");
-		logo.setIcon(new ImageIcon(GUI.class.getResource("/Data/HTML/img/Agip_logomini.png")));
+		logo.setIcon(new ImageIcon(JxBrowserDemo.class.getResource("/Data/HTML/img/Agip_logomini.png")));
 		GridBagConstraints gbc_logo = new GridBagConstraints();
 		
 		gbc_logo.insets = new Insets(0, 0, 0, 5);
