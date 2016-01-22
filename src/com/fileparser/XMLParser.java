@@ -35,6 +35,8 @@ public class XMLParser
 	 * 
 	 * @param browser
 	 */
+	
+	/*
 	public static void GenerateStationFromCSV(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider,
 			List<String[]> ListeStations)
 	{
@@ -123,9 +125,9 @@ public class XMLParser
 		}
 		catch (Exception e)
 		{
-			System.out.println(">>> Execption " + /* e.getMessage()) + */ e.getStackTrace());
+			System.out.println(">>> Execption " + /* e.getMessage()) +  e.getStackTrace());
 		}
-	}
+	}*/
 
 	/**
 	 * Methode d"analyse d'un fichier XML [� retravailler en focntion du code de
@@ -187,7 +189,11 @@ public class XMLParser
 				// creation du marker
 				new Marker(browser, st.getAdresse().getPosition().getCoordonnee().getLatitude(),
 						st.getAdresse().getPosition().getCoordonnee().getLongitude(), st.getId().toString(),
-						st.getAdresse().getRue(), st.getAdresse().getCodepostal(), st.getAdresse().getVille());
+						st.getAdresse().getRue(), st.getAdresse().getCodepostal(), st.getAdresse().getVille(),
+						st.getNom(),st.getHeureOuverture(),st.getHeureFermeture()
+						
+						
+						);
 
 			}
 			;

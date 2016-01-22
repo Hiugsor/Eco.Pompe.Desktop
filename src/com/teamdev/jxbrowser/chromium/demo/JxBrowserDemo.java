@@ -38,6 +38,7 @@ public class JxBrowserDemo extends JFrame {
 	private static int zoomValue = 4;
 	public static ArrayList<Station> ListeStationsDAO = null;
 	public static List<String[]> ListeStations;
+	
 
 	// private static String xmlSource =
 	// "src\\Data\\XML\\PrixCarburants_quotidien_20151210.xml";
@@ -75,6 +76,7 @@ public class JxBrowserDemo extends JFrame {
 		final Browser browser = new Browser();
 		BrowserView browserView = new BrowserView(browser);
 		JButton btnGenerateStations = new JButton("Generate Stations");
+		
 
 		JPanel tabListe = new JPanel();
 
@@ -103,11 +105,14 @@ public class JxBrowserDemo extends JFrame {
 		navigationBar.setLayout(gbl_navigationBar);
 
 		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.addItem("Gazole");
 		comboBox.addItem("SP95");
+		comboBox.addItem("E85");
+		comboBox.addItem("GPLc");
+		comboBox.addItem("E10");
 		comboBox.addItem("SP98");
-		comboBox.addItem("Diesel");
-		comboBox.addItem("Diesel +");
-		comboBox.addItem("GPL");
+		
+		
 
 		JButton btnCarburant = new JButton("Carburant");
 		btnCarburant.setBackground(new Color(39, 39, 39));
@@ -300,24 +305,34 @@ public class JxBrowserDemo extends JFrame {
 		btnGenerateStations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					
+					//ListeStations.clear();
+					tabListe.removeAll();
+					tabListe.repaint();		
+					
+					
 					JavaScript.deleteStations(browser); // Suppression des
 														// anciennes stations
 														// eventuelles
+					String carbChoix = comboBox.getSelectedItem().toString();
+					System.out.println(carbChoix);
+					//String carbChoix = "E10";
 
 					ListeStations = null;
 					ListeStationsDAO = null;
+					
 
 					String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 					System.out.println("Debut Test n�1 @ " + timeStamp);
 
 					// recuperation des donn�es input
 					GestionRecherche grecherche = new GestionRecherche();
-					int i = 0;
+
 					// Initialisation de liste
 					try {
 						//ListeStationsDAO = grecherche.recupereStations(recherche);
 						
-						ListeStationsDAO = grecherche.recupereStations(Double.parseDouble(txtLAT.getText()),Double.parseDouble(txtLONG.getText()),slider.getValue());
+						ListeStationsDAO = grecherche.recupereStations(Double.parseDouble(txtLAT.getText()),Double.parseDouble(txtLONG.getText()),carbChoix,slider.getValue());
 						
 					} catch (Exception ex) {
 						// ex.printStackTrace();
@@ -484,9 +499,14 @@ public class JxBrowserDemo extends JFrame {
 				// Recuperation des donn�es du tableau listeStations issues de
 				// l'import du fichier xml-csv ou db (pour l'instant issue de la
 				// fonction XMLParser )
+				
+				String carbChoix = comboBox.getSelectedItem().toString();
+				System.out.println(carbChoix);
+				//String carbChoix = "E10";
+				
 				if (ListeStationsDAO.size() > 0) {
 					System.out.println(ListeStationsDAO.size());
-					int index = 0;
+					
 					/*for (Station station : ListeStationsDAO) {
 						
 						System.out.println("-> Num " + ++index + " | Station ID : " + station[0] + " | Adresse : "
@@ -502,7 +522,7 @@ public class JxBrowserDemo extends JFrame {
 					 */
 					for (Station station : ListeStationsDAO) {
 
-						new FrameStation(tabListe, indexTabList,  station);
+						new FrameStation(tabListe, indexTabList,  station, carbChoix);
 						indexTabList++;
 
 					}
