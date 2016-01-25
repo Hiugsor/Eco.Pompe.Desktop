@@ -71,14 +71,57 @@ public class FrameStation
 		gbc_distance.gridy = 0;
 		panel_3.add(distance, gbc_distance);
 
-		JLabel logo = new JLabel("");
-		logo.setIcon(new ImageIcon(JxBrowserDemo.class.getResource("/Data/HTML/img/Agip_logomini.png")));
-		GridBagConstraints gbc_logo = new GridBagConstraints();
+		String shell = "shell";
+		String leclerc = "e.leclerc";
+		String total = "total";
+		String avia = "avia";
+		String u = "super u";
+		String auchan = "auchan";
+		String agip = "agip";
+		String bp = "bp";
+		String carrefour = "carrefour";
+		String casino = "supermarché casino";
+		String dyneff = "dyneff";
+		String elan = "elan";
+		String elf = "elf";
+		String esso = "esso express";
+		String intermarche = "intermarché";
+		String h2 = "hyper u";
+		String totalAccess = "total access";
+		String totalRaf = "total raffinage marketing";
+		String carrefourMark = "carrefour market";
+		String simply = "simply market";
+		
 
-		gbc_logo.insets = new Insets(0, 0, 0, 5);
-		gbc_logo.gridx = 1;
-		gbc_logo.gridy = 0;
-		panel_3.add(logo, gbc_logo);
+		if (station.getNom().equals(shell) || station.getNom().equals(leclerc) || station.getNom().equals(total) 
+				|| station.getNom().equals(avia) || station.getNom().equals(u) || station.getNom().equals(auchan)
+				|| station.getNom().equals(agip) || station.getNom().equals(bp) || station.getNom().equals(carrefour)
+				|| station.getNom().equals(casino) || station.getNom().equals(dyneff) || station.getNom().equals(elan)
+				|| station.getNom().equals(elf) || station.getNom().equals(esso) || station.getNom().equals(intermarche)
+				|| station.getNom().equals(h2) || station.getNom().equals(totalAccess) || station.getNom().equals(totalRaf)
+				|| station.getNom().equals(carrefourMark)|| station.getNom().equals(simply))
+		{
+			String Logo = station.getNom();
+			System.out.println(station.getNom());
+
+			JLabel logo = new JLabel("");
+			logo.setIcon(new ImageIcon(JxBrowserDemo.class.getResource("/Data/HTML/img/" + Logo + ".png")));
+			GridBagConstraints gbc_logo = new GridBagConstraints();
+			gbc_logo.insets = new Insets(0, 0, 0, 5);
+			gbc_logo.gridx = 1;
+			gbc_logo.gridy = 0;
+			panel_3.add(logo, gbc_logo);
+		}
+		else
+		{
+			JLabel logo = new JLabel("");
+			logo.setIcon(new ImageIcon(JxBrowserDemo.class.getResource("/Data/HTML/img/Logo_EcoPompNotFind.png")));
+			GridBagConstraints gbc_logo = new GridBagConstraints();
+			gbc_logo.insets = new Insets(0, 0, 0, 5);
+			gbc_logo.gridx = 1;
+			gbc_logo.gridy = 0;
+			panel_3.add(logo, gbc_logo);
+		}
 
 		JLabel info = new JLabel("<html><h2>" + station.getNom() + "</h2>" + station.getAdresse().getRue() + "<BR>"
 				+ station.getAdresse().getCodepostal() + " " + station.getAdresse().getVille() + "</html>");
@@ -90,7 +133,7 @@ public class FrameStation
 		gbc_info.gridx = 2;
 		gbc_info.gridy = 0;
 		panel_3.add(info, gbc_info);
-		
+
 		JLabel prix = new JLabel();
 		prix.setForeground(Color.WHITE);
 		prix.setFont(new Font("Tahoma", Font.PLAIN, 28));
@@ -101,7 +144,6 @@ public class FrameStation
 
 		if (station.getCarburants() != null && station.getCarburants().size() > 0)
 		{
-			
 
 			if ((carbChoix != null) && (!carbChoix.equals("")) && (!carbChoix.equals(" ")))
 			{
@@ -115,57 +157,47 @@ public class FrameStation
 					{
 						float PrixD = station.getCarburants().get(i).getPrix() / 1000;
 						String prixC = Float.toString(PrixD);
-						
-						prix.setText(prixC + " €");	
+
+						prix.setText(prixC + " €");
 					}
-					
+
 					i++;
 				}
-				
+
 				System.out.println(trouve);
-/*
-				if (trouve)
-				{
-					System.out.println("Il est là");
-					// String prixC =
-					// station.getCarburants().get(i).getPrix().toString();
-					// Double PrixD = Double.parseDouble(prixC)/1000;
-					float PrixD = station.getCarburants().get(i).getPrix() / 1000;
-					String prixC = Float.toString(PrixD);
-					//prixAff = String.format("%.03f", prixC);
-
-					System.out.println(prixC);
-					
-					JLabel prix = new JLabel(prixC + " €");
-					prix.setForeground(Color.WHITE);
-					prix.setFont(new Font("Tahoma", Font.PLAIN, 28));
-					GridBagConstraints gbc_prix = new GridBagConstraints();
-					gbc_prix.gridx = 3;
-					gbc_prix.gridy = 0;
-					panel_3.add(prix, gbc_prix);					
-				}
-
-				else if(trouve == false)
-				{
-					JLabel prix = new JLabel("carburant non distribué");
-					prix.setForeground(Color.WHITE);
-					prix.setFont(new Font("Tahoma", Font.PLAIN, 18));
-					GridBagConstraints gbc_prix = new GridBagConstraints();
-					gbc_prix.gridx = 3;
-					gbc_prix.gridy = 0;
-					panel_3.add(prix, gbc_prix);
-				}
-				*/
+				/*
+				 * if (trouve) { System.out.println("Il est là"); // String
+				 * prixC = //
+				 * station.getCarburants().get(i).getPrix().toString(); //
+				 * Double PrixD = Double.parseDouble(prixC)/1000; float PrixD =
+				 * station.getCarburants().get(i).getPrix() / 1000; String prixC
+				 * = Float.toString(PrixD); //prixAff = String.format("%.03f",
+				 * prixC);
+				 * 
+				 * System.out.println(prixC);
+				 * 
+				 * JLabel prix = new JLabel(prixC + " €");
+				 * prix.setForeground(Color.WHITE); prix.setFont(new
+				 * Font("Tahoma", Font.PLAIN, 28)); GridBagConstraints gbc_prix
+				 * = new GridBagConstraints(); gbc_prix.gridx = 3;
+				 * gbc_prix.gridy = 0; panel_3.add(prix, gbc_prix); }
+				 * 
+				 * else if(trouve == false) { JLabel prix = new JLabel(
+				 * "carburant non distribué"); prix.setForeground(Color.WHITE);
+				 * prix.setFont(new Font("Tahoma", Font.PLAIN, 18));
+				 * GridBagConstraints gbc_prix = new GridBagConstraints();
+				 * gbc_prix.gridx = 3; gbc_prix.gridy = 0; panel_3.add(prix,
+				 * gbc_prix); }
+				 */
 			}
-			
+
 		}
-		else 
+		else
 		{
 			prix.setText("carburant non distribué");
-			prix.setFont(new Font("Tahoma", Font.PLAIN, 18));					
+			prix.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		}
-		
-	
+
 		/*
 		 * String prixC = (station.getCarburants() != null &&
 		 * station.getCarburants().size() > 0) ?
