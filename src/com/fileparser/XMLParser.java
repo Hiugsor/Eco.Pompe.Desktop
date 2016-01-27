@@ -2,6 +2,7 @@ package com.fileparser;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JSlider;
@@ -29,6 +30,10 @@ public class XMLParser
 	public static double latMax = 51.190288;
 	public static double longMin = -5.182504;
 	public static double longMax = 9.588748;
+	
+	static String cochGreen= "cochonVert";
+	static String cochYellow = "cochonJaune";
+	static String cochRed = "cochonRouge";
 
 	/**
 	 * Methode d"analyse d'un fichier CSV
@@ -179,21 +184,44 @@ public class XMLParser
 	}// [End Method]
 
 	public static void CreateMarkerFromBdd(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider,
-			ArrayList<Station> ListeStations)
+			ArrayList<Station> ListeStations,String typeCarbu)
 	{
+		String cochColor = "";
 
 		if (ListeStations != null)
 		{
+			
+			float borneOrange = ListeStations.size()/3;
+			float borneRouge = borneOrange*2;
+			
+			
+			int i =0;
+			
 			for (Station st : ListeStations)
 			{
+				
+				if (i>borneRouge)
+				{
+					cochColor = cochRed;
+				}
+				else if (i>borneOrange)
+				{
+					cochColor = cochYellow;
+				}
+				else
+				{
+					cochColor = cochGreen; 
+				}
+				
 				// creation du marker
 				new Marker(browser, st.getAdresse().getPosition().getCoordonnee().getLatitude(),
 						st.getAdresse().getPosition().getCoordonnee().getLongitude(), st.getId().toString(),
 						st.getAdresse().getRue(), st.getAdresse().getCodepostal(), st.getAdresse().getVille(),
-						st.getNom(),st.getHeureOuverture(),st.getHeureFermeture()
+						st.getNom(),st.getHeureOuverture(),st.getHeureFermeture(), cochColor
 						
 						
 						);
+				i++;
 
 			}
 			;

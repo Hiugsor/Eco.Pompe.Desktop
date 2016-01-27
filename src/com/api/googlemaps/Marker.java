@@ -47,7 +47,7 @@ public class Marker {
 	 * @param lng = longitude
 	 * @param column = ID point
 	 */
-	public Marker(Browser browser, double lat, double lng, String ID, String adr, String CP, String ville, String nom, Time horaireOuv, Time horaireFer  )
+	public Marker(Browser browser, double lat, double lng, String ID, String adr, String CP, String ville, String nom, Time horaireOuv, Time horaireFer, String colorCoch  )
 	{		
 		
 		String pathPics = "img/miniCochon.png";
@@ -72,7 +72,7 @@ public class Marker {
 			  + "title: '" +  ID + "'\n" + "});\n"
 			  + "marker.setIcon('" + pathPics + "');"
 			  + "marker.addListener('click', function() {this.infowindow.open(map, this);});"
-			  + "marker.setIcon('img/miniCochon.png');"
+			  + "marker.setIcon('img/"+ colorCoch+".png');"
 			  + "markerStationArray.push(marker);"
 			  );
 	}

@@ -38,7 +38,7 @@ public class JxBrowserDemo extends JFrame {
 	private static int zoomValue = 4;
 	public static ArrayList<Station> ListeStationsDAO = null;
 	public static List<String[]> ListeStations;
-	
+	String typeCarbu = "";
 
 	// private static String xmlSource =
 	// "src\\Data\\XML\\PrixCarburants_quotidien_20151210.xml";
@@ -195,8 +195,10 @@ public class JxBrowserDemo extends JFrame {
 				//new Circle(browser, txtLAT, txtLONG, slider);
 
 				// Rexecute btn Genaration des stations
+				
 				btnGenerateStations.doClick();
-				XMLParser.CreateMarkerFromBdd(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
+				typeCarbu = comboBox.getSelectedItem().toString();
+				XMLParser.CreateMarkerFromBdd(browser, txtLAT, txtLONG, slider, ListeStationsDAO,typeCarbu);
 			}
 
 			@Override
@@ -338,8 +340,9 @@ public class JxBrowserDemo extends JFrame {
 						// ex.printStackTrace();
 						ex.getStackTrace();
 					}
+					typeCarbu = comboBox.getSelectedItem().toString();
 
-					XMLParser.CreateMarkerFromBdd(browser, txtLAT, txtLONG, slider, ListeStationsDAO);
+					XMLParser.CreateMarkerFromBdd(browser, txtLAT, txtLONG, slider, ListeStationsDAO,typeCarbu);
 
 					timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 					System.out.println("Fin Test n�1 @ " + timeStamp);
