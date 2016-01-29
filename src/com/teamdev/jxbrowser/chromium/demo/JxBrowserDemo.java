@@ -1,6 +1,7 @@
 package com.teamdev.jxbrowser.chromium.demo;
 
 import com.GUI.FrameStation;
+import com.GUI.graph;
 import com.api.googlemaps.Circle;
 import com.api.googlemaps.JavaScript;
 import com.bo.Carburant;
@@ -464,12 +465,120 @@ public class JxBrowserDemo extends JFrame {
 		CardLayout myCardLayout = (CardLayout) (myCards.getLayout());
 		frame.getContentPane().add(myCards, BorderLayout.CENTER);
 		
-		JScrollPane scrS = new JScrollPane();
-		myCards.add(scrS, "name_5293621104462");
-		
 		JPanel tabStat = new JPanel();
+		JScrollPane scrS = new JScrollPane(tabStat);
+		scrS.setBorder(null);
+		scrS.setForeground(Color.BLACK);
+		myCards.add("Statistique", scrS);
+		//*
+		
+		
+		tabStat.setForeground(Color.BLACK);
 		tabStat.setBackground(Color.BLACK);
 		scrS.setViewportView(tabStat);
+		GridBagLayout gbl_tabStat = new GridBagLayout();
+		gbl_tabStat.columnWidths = new int[]{0, 0};
+		gbl_tabStat.rowHeights = new int[]{0, 0, 0, 0};
+		gbl_tabStat.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_tabStat.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		tabStat.setLayout(gbl_tabStat);
+		
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// 1erGraph
+		
+		
+		
+		JPanel Gazoile = new JPanel();
+		Gazoile.setBackground(Color.BLACK);
+		GridBagConstraints gbc_Gazoile = new GridBagConstraints();
+		gbc_Gazoile.insets = new Insets(0, 0, 5, 0);
+		gbc_Gazoile.fill = GridBagConstraints.BOTH;
+		gbc_Gazoile.gridx = 0;
+		gbc_Gazoile.gridy = 0;
+		tabStat.add(Gazoile, gbc_Gazoile);
+		
+		
+		
+			List<Float> donnees = new ArrayList<Float>();
+			List<String> l1 = new ArrayList<String>();
+			List<String> l2 = new ArrayList<String>();
+			l2.add("0");
+			l1.add("10");
+			l1.add("20");
+			l1.add("30");
+			l1.add("40");
+			donnees.add(18f);
+			donnees.add(20f);
+			donnees.add(30f);
+			donnees.add(33f);
+			
+			//frame = new JFrame();
+			//frame.setBounds(100, 100, 1211, 650);
+			//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
+			//JPanel f = new JPanel();
+			//frame.getContentPane().add(Gazoile, BorderLayout.CENTER);	
+			//Gazoile.setBounds(100,100,1211,650);
+			
+			
+			////
+			// mettre l'appel au données
+			////
+			
+			graph gazoile = new graph("Gazoile", " Date", "Prix Moyen", donnees, Color.white	, l2, l1, true);
+			gazoile.setPreferredSize(new Dimension(1200, 500));
+			Gazoile.add(gazoile);
+			Gazoile.setVisible(true);
+		
+		
+		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		///2emeGraph
+		
+		
+		JPanel SP95 = new JPanel();
+		SP95.setBackground(Color.BLACK);
+		GridBagConstraints gbc_SP95 = new GridBagConstraints();
+		gbc_SP95.insets = new Insets(0, 0, 5, 0);
+		gbc_SP95.fill = GridBagConstraints.BOTH;
+		gbc_SP95.gridx = 0;
+		gbc_SP95.gridy = 1;
+		tabStat.add(SP95, gbc_SP95);
+		
+		
+		
+		
+		
+		////
+		// mettre l'appel au données
+		////
+		
+		graph sp95 = new graph("SP95", " Date", "Prix Moyen", donnees, Color.white	, l2, l1, true);
+		sp95.setPreferredSize(new Dimension(1200, 500));
+		SP95.add(sp95);
+		
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		///3emeGraph
+		
+		
+		JPanel E10 = new JPanel();
+		E10.setBackground(Color.BLACK);
+		GridBagConstraints gbc_E10 = new GridBagConstraints();
+		gbc_E10.fill = GridBagConstraints.BOTH;
+		gbc_E10.gridx = 0;
+		gbc_E10.gridy = 2;
+		tabStat.add(E10, gbc_E10);
+		
+		
+		////
+		// mettre l'appel au données
+		////
+		
+		graph e10 = new graph("E10", " Date", "Prix Moyen", donnees, Color.white	, l2, l1, true);
+		e10.setPreferredSize(new Dimension(1200, 500));
+		E10.add(e10);
 
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JBUTTONS (Carte, Liste, Stat)
@@ -549,62 +658,10 @@ public class JxBrowserDemo extends JFrame {
 		btnInfos.setPreferredSize(new Dimension(200, 40));
 		btnInfos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				myCardLayout.show(myCards, "Statistiques");
+				
+				myCardLayout.show(myCards, "Statistique");
 
-				/*
-				 * System.out.println(""); // Test Temporaire de calcul de
-				 * coordonn�es g�ographique // Point de Depart double latOrigine
-				 * = Double.parseDouble(txtLAT.getText());// 43.610769; double
-				 * lngOrigine = Double.parseDouble(txtLONG.getText());//
-				 * 3.876622;
-				 * 
-				 * // Calcul des coordonn�es d'un point par methode polaire (Lat
-				 * // D�part, Long D�part , Distance en km)
-				 * com.processing.Borders border =
-				 * GeoProcessing.getWGS84FrameLimits(latOrigine, lngOrigine,
-				 * slider.getValue());
-				 * 
-				 * // Recuperation des donn�es // Border Nord Ouest
-				 * System.out.println("Point Nord Ouest"); System.out.println(
-				 * "Lat >>> " + border.getBorderNO().getLatitude() + " ou " +
-				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().
-				 * getLatitude())); System.out.println("Long>>> " +
-				 * border.getBorderNO().getLongitude() + " ou " +
-				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderNO().
-				 * getLongitude())); // Controle double distNO =
-				 * GeoProcessing.getDistance(latOrigine, lngOrigine,
-				 * border.getBorderNO().getLatitude(),
-				 * border.getBorderNO().getLongitude()); System.out.println(
-				 * "Distance (km): " + distNO); double azmNO =
-				 * GeoProcessing.getAzimuth(latOrigine, lngOrigine,
-				 * border.getBorderNO().getLatitude(),
-				 * border.getBorderNO().getLongitude()); System.out.println(
-				 * "Azimuth (Deg): " + azmNO);
-				 * 
-				 * System.out.println("");
-				 * 
-				 * // Border Sud Est System.out.println("Point Sud Est");
-				 * System.out.println("Lat >>> " +
-				 * border.getBorderSE().getLatitude() + " ou " +
-				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().
-				 * getLatitude())); System.out.println("Long>>> " +
-				 * border.getBorderSE().getLongitude() + " ou " +
-				 * GeoProcessing.convert_DegDEC_to_DegSEXA(border.getBorderSE().
-				 * getLongitude())); // Controle double distSE =
-				 * GeoProcessing.getDistance(latOrigine, lngOrigine,
-				 * border.getBorderSE().getLatitude(),
-				 * border.getBorderSE().getLongitude()); System.out.println(
-				 * "Distance (km): " + distSE); double azmSE =
-				 * GeoProcessing.getAzimuth(latOrigine, lngOrigine,
-				 * border.getBorderSE().getLatitude(),
-				 * border.getBorderSE().getLongitude()); System.out.println(
-				 * "Azimuth (Deg): " + azmSE); System.out.println("");
-				 * 
-				 * // Test Conversion double conversion =
-				 * GeoProcessing.convert_DegSEXA_to_DegDEC(
-				 * "23�12\'34.56023455300001\"");
-				 * System.out.println(conversion);
-				 */
+				
 
 			}
 		});
