@@ -29,7 +29,6 @@
 	<classpathentry kind="lib" path="lib/jxbrowser-6.0.2/lib/jxbrowser-win-6.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/jxbrowser-6.0.2/lib/license.jar"/>
 	<classpathentry kind="lib" path="lib/jxbrowser-6.0.2/lib/jxbrowserdemo.jar"/>
-	<classpathentry kind="lib" path="lib/EcoPompe Framework/ecopompe2.5.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart/jcommon-1.0.16-junit.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart/jcommon-1.0.16.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart/jcommon-xml-1.0.16.jar"/>
@@ -42,5 +41,6 @@
 	<classpathentry kind="lib" path="lib/jfreechart/lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart/lib/servlet.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart/lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="lib/EcoPompe Framework/ecopompe2.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

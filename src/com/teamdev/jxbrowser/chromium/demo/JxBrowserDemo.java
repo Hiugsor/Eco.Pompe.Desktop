@@ -106,6 +106,11 @@ public class JxBrowserDemo extends JFrame {
 		navigationBar.setLayout(gbl_navigationBar);
 
 		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	btnGenerateStations.doClick();
+		    }
+		});
 		comboBox.addItem("Gazole");
 		comboBox.addItem("SP95");
 		comboBox.addItem("E85");
@@ -326,9 +331,9 @@ public class JxBrowserDemo extends JFrame {
 					
 
 					String timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-					System.out.println("Debut Test n�1 @ " + timeStamp);
+					System.out.println("Debut Test #1 @ " + timeStamp);
 
-					// recuperation des donn�es input
+					// recuperation des donnees input
 					GestionRecherche grecherche = new GestionRecherche();
 
 					// Initialisation de liste
@@ -342,11 +347,16 @@ public class JxBrowserDemo extends JFrame {
 						ex.getStackTrace();
 					}
 					typeCarbu = comboBox.getSelectedItem().toString();
-
+					
+					
+					//Trouver le min et max des tarifs dans la ListeStations
+					double max = 0;
+					double min = 0;
+							
 					XMLParser.CreateMarkerFromBdd(browser, txtLAT, txtLONG, slider, ListeStationsDAO,typeCarbu);
 
 					timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
-					System.out.println("Fin Test n�1 @ " + timeStamp);
+					System.out.println("Fin Test #1 @ " + timeStamp);
 
 				} catch (Exception ex) {
 					// System.out.println("Execption " + ex.getMessage());
@@ -369,7 +379,9 @@ public class JxBrowserDemo extends JFrame {
 		btnDeleteStations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					ListeStations.clear();
+					
+					ListeStations = null;
+					ListeStationsDAO = null;
 					tabListe.removeAll();
 					tabListe.repaint();
 					JavaScript.deleteStations(browser); // suppression des
@@ -489,14 +501,14 @@ public class JxBrowserDemo extends JFrame {
 		
 		
 		
-		JPanel Gazoile = new JPanel();
-		Gazoile.setBackground(Color.BLACK);
-		GridBagConstraints gbc_Gazoile = new GridBagConstraints();
-		gbc_Gazoile.insets = new Insets(0, 0, 5, 0);
-		gbc_Gazoile.fill = GridBagConstraints.BOTH;
-		gbc_Gazoile.gridx = 0;
-		gbc_Gazoile.gridy = 0;
-		tabStat.add(Gazoile, gbc_Gazoile);
+		JPanel gazoil = new JPanel();
+		gazoil.setBackground(Color.BLACK);
+		GridBagConstraints gbc_Gazoil = new GridBagConstraints();
+		gbc_Gazoil.insets = new Insets(0, 0, 5, 0);
+		gbc_Gazoil.fill = GridBagConstraints.BOTH;
+		gbc_Gazoil.gridx = 0;
+		gbc_Gazoil.gridy = 0;
+		tabStat.add(gazoil, gbc_Gazoil);
 		
 		
 		
@@ -528,8 +540,8 @@ public class JxBrowserDemo extends JFrame {
 			
 			graph gazoile = new graph("Gazoile", " Date", "Prix Moyen", donnees, Color.white	, l2, l1, true);
 			gazoile.setPreferredSize(new Dimension(1200, 500));
-			Gazoile.add(gazoile);
-			Gazoile.setVisible(true);
+			gazoil.add(gazoile);
+			gazoil.setVisible(true);
 		
 		
 		

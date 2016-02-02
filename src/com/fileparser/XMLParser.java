@@ -186,47 +186,75 @@ public class XMLParser
 	public static void CreateMarkerFromBdd(Browser browser, JTextField txtLat, JTextField txtLong, JSlider slider,
 			ArrayList<Station> ListeStations,String typeCarbu)
 	{
-		String cochColor = "";
+		
 
 		if (ListeStations != null)
-		{
-			
-			float borneOrange = ListeStations.size()/3;
-			float borneRouge = borneOrange*2;
+		{						
 			
 			
-			int i =0;
+			String cochColor = "";
+			//Trouver le min et max des tarifs dans la ListeStations
+			float max = 0;					// Initialisation a zero
+			float min = 100000000;			// Initialisation sur un gd nombre
+			float prixD = 0;
+			float ecartTarif = 0;
+			float borneOrange = 0;
+			float borneRouge = 0;
 			
+			// Calcul Min Max
+			for (Station st : ListeStations)
+			{				
+				int i = 0;
+				int nbcarb = st.getCarburants().size();				
+				// Determination de Min Max du Tarif du carburant selectionné
+				while (i < nbcarb)
+				{					
+					if (st.getCarburants().get(i).getNom().equalsIgnoreCase(typeCarbu))
+					{						
+						prixD = st.getCarburants().get(i).getPrix() / 1000;						
+						if(prixD > max) max = prixD;						
+						if(prixD < min) min = prixD;						
+					}
+					i++;
+				}
+				//Calcul des paliers de colorisation
+				ecartTarif = max - min;						
+			}
+				
+				
 			for (Station st : ListeStations)
 			{
+				//Calcul des paliers de colorisation
+				borneOrange = min + ecartTarif /3;
+				borneRouge = min + (ecartTarif /3)*2;
+				int i = 0;
+				int nbcarb = st.getCarburants().size();				
+				// Determination de Min Max du Tarif du carburant selectionné
+				while (i < nbcarb)
+				{					
+					if (st.getCarburants().get(i).getNom().equalsIgnoreCase(typeCarbu))
+					{						
+						prixD = st.getCarburants().get(i).getPrix() / 1000;												
+					}
+					i++;
+				}
+				//Selection de la couleur pour choix de l'icon du Marker
+				if (prixD > borneRouge)	cochColor = cochRed;
+				else if (prixD > borneOrange && prixD <= borneRouge) cochColor = cochYellow;
+				else cochColor = cochGreen; 
 				
-				if (i>borneRouge)
-				{
-					cochColor = cochRed;
-				}
-				else if (i>borneOrange)
-				{
-					cochColor = cochYellow;
-				}
-				else
-				{
-					cochColor = cochGreen; 
-				}
-				
-				// creation du marker
+				//Creation d'un Marker du package com.api.googlemaps.Marker.java
 				new Marker(browser, st.getAdresse().getPosition().getCoordonnee().getLatitude(),
 						st.getAdresse().getPosition().getCoordonnee().getLongitude(), st.getId().toString(),
 						st.getAdresse().getRue(), st.getAdresse().getCodepostal(), st.getAdresse().getVille(),
-						st.getNom(),st.getHeureOuverture(),st.getHeureFermeture(), cochColor
-						
-						
-						);
-				i++;
-
+						st.getNom(),st.getHeureOuverture(),st.getHeureFermeture(), cochColor, prixD, typeCarbu);
+				}
+		
 			}
-			;
-
+			
+			
+			
 		}
 
-	}
+	
 }// [End Class]

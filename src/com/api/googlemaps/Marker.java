@@ -47,7 +47,7 @@ public class Marker {
 	 * @param lng = longitude
 	 * @param column = ID point
 	 */
-	public Marker(Browser browser, double lat, double lng, String ID, String adr, String CP, String ville, String nom, Time horaireOuv, Time horaireFer, String colorCoch  )
+	public Marker(Browser browser, double lat, double lng, String ID, String adr, String CP, String ville, String nom, Time horaireOuv, Time horaireFer, String colorCoch, float prix, String carburant)
 	{		
 		
 		String pathPics = "img/miniCochon.png";
@@ -60,7 +60,10 @@ public class Marker {
 				+ "<br/> CP : " + CP 
 				+ "<br/> Ville : "+ ville.toUpperCase()
 				+ "<br/><br/> Horaire ouverture : " + horaireOuv 
-				+ "<br/> Horaire fermeture : "+ horaireFer;
+				+ "<br/> Horaire fermeture : "+ horaireFer
+				+ "<br/>"+ carburant + ": " + Float.toString(prix) + " euros";
+				
+				
 		
 		browser.executeJavaScript(
 				"var myLatlng = new google.maps.LatLng(" + lat + "," + lng + ");\n"
