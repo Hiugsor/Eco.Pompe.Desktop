@@ -4,18 +4,11 @@ import com.GUI.FrameStation;
 import com.GUI.graph;
 import com.api.googlemaps.Circle;
 import com.api.googlemaps.JavaScript;
-import com.bo.Carburant;
-import com.bo.Coordonnees;
-import com.bo.Critere;
-import com.bo.Point;
-import com.bo.Recherche;
 import com.bo.Station;
-import com.bo.TypeService;
-import com.dao.StationDao;
+import com.bo.Stats;
+import com.dao.VendreDao;
 import com.fileparser.XMLParser;
-import com.processing.GeoProcessing_xtof;
 import com.processing.GestionRecherche;
-import com.processing.Borders;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
@@ -33,11 +26,16 @@ import javax.swing.event.*;
 
 //Class
 public class JxBrowserDemo extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Attributs
 	public static final int MIN_ZOOM = 0;
 	public static final int MAX_ZOOM = 21;
 	private static int zoomValue = 4;
 	public static ArrayList<Station> ListeStationsDAO = null;
+	List<Station> stations = new ArrayList<Station>();
 	public static List<String[]> ListeStations;
 	String typeCarbu = "";
 
@@ -205,6 +203,7 @@ public class JxBrowserDemo extends JFrame {
 				btnGenerateStations.doClick();
 				typeCarbu = comboBox.getSelectedItem().toString();
 				XMLParser.CreateMarkerFromBdd(browser, txtLAT, txtLONG, slider, ListeStationsDAO,typeCarbu);
+				
 			}
 
 			@Override
@@ -313,6 +312,7 @@ public class JxBrowserDemo extends JFrame {
 		btnGenerateStations.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+										
 					
 					//ListeStations.clear();
 					tabListe.removeAll();
@@ -348,22 +348,27 @@ public class JxBrowserDemo extends JFrame {
 					}
 					typeCarbu = comboBox.getSelectedItem().toString();
 					
-					
-					//Trouver le min et max des tarifs dans la ListeStations
-					double max = 0;
-					double min = 0;
 							
 					XMLParser.CreateMarkerFromBdd(browser, txtLAT, txtLONG, slider, ListeStationsDAO,typeCarbu);
 
 					timeStamp = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 					System.out.println("Fin Test #1 @ " + timeStamp);
+					
+					
+					for (Station station : ListeStationsDAO)
+					{
+						stations.add(station);
+						
+					}
+					
+					
 
 				} catch (Exception ex) {
 					// System.out.println("Execption " + ex.getMessage());
 					// ex.printStackTrace();
 				}
 			}
-		});
+		});		 
 
 		// //////////////////////////////////////////////////////////
 		// BTN Suppression des stations de la carte
@@ -501,96 +506,68 @@ public class JxBrowserDemo extends JFrame {
 		
 		
 		
-		JPanel gazoil = new JPanel();
-		gazoil.setBackground(Color.BLACK);
+		JPanel graphiqueNational = new JPanel();
+		graphiqueNational.setBackground(Color.BLACK);
 		GridBagConstraints gbc_Gazoil = new GridBagConstraints();
 		gbc_Gazoil.insets = new Insets(0, 0, 5, 0);
 		gbc_Gazoil.fill = GridBagConstraints.BOTH;
 		gbc_Gazoil.gridx = 0;
 		gbc_Gazoil.gridy = 0;
-		tabStat.add(gazoil, gbc_Gazoil);
+		tabStat.add(graphiqueNational, gbc_Gazoil);
+		
 		
 		
 		
 			List<Float> donnees = new ArrayList<Float>();
 			List<String> l1 = new ArrayList<String>();
 			List<String> l2 = new ArrayList<String>();
+			List<Stats> ListeStatNat = VendreDao.recupereStatsNat();
+			final List<Stats> ListeStatLoc = new ArrayList<Stats>();
+			
+			
+			for (Stats stats : ListeStatNat)
+			{
+				donnees.add(stats.getMoyenne()/1000);
+				l1.add(stats.getCarburant().getNom());
+				
+			}
+			
+						
 			l2.add("0");
-			l1.add("10");
+			//l2.add("1");
+			/*l1.add("10");
 			l1.add("20");
 			l1.add("30");
 			l1.add("40");
 			donnees.add(18f);
 			donnees.add(20f);
 			donnees.add(30f);
-			donnees.add(33f);
-			
-			//frame = new JFrame();
-			//frame.setBounds(100, 100, 1211, 650);
-			//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			
-			//JPanel f = new JPanel();
-			//frame.getContentPane().add(Gazoile, BorderLayout.CENTER);	
-			//Gazoile.setBounds(100,100,1211,650);
+			donnees.add(33f);*/
 			
 			
-			////
-			// mettre l'appel au données
-			////
 			
-			graph gazoile = new graph("Gazoile", " Date", "Prix Moyen", donnees, Color.white	, l2, l1, true);
-			gazoile.setPreferredSize(new Dimension(1200, 500));
-			gazoil.add(gazoile);
-			gazoil.setVisible(true);
+			graph graphNat = new graph("Prix Moyen National", " Carburants", "Prix Moyen (en €)", donnees, Color.white, l2, l1, true);
+			graphNat.setPreferredSize(new Dimension(1200, 500));
+			graphiqueNational.add(graphNat);
+			graphNat.setVisible(true);
 		
 		
 		
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		///2emeGraph
-		
-		
-		JPanel SP95 = new JPanel();
-		SP95.setBackground(Color.BLACK);
-		GridBagConstraints gbc_SP95 = new GridBagConstraints();
-		gbc_SP95.insets = new Insets(0, 0, 5, 0);
-		gbc_SP95.fill = GridBagConstraints.BOTH;
-		gbc_SP95.gridx = 0;
-		gbc_SP95.gridy = 1;
-		tabStat.add(SP95, gbc_SP95);
-		
+			List<Float> donneesLoc = new ArrayList<Float>();
+			List<String> l1Loc = new ArrayList<String>();
+			List<String> l2Loc = new ArrayList<String>();
+			
+			
+			System.out.println("merde");			
+			
+			
+			
 		
 		
 		
 		
-		////
-		// mettre l'appel au données
-		////
-		
-		graph sp95 = new graph("SP95", " Date", "Prix Moyen", donnees, Color.white	, l2, l1, true);
-		sp95.setPreferredSize(new Dimension(1200, 500));
-		SP95.add(sp95);
-		
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		///3emeGraph
-		
-		
-		JPanel E10 = new JPanel();
-		E10.setBackground(Color.BLACK);
-		GridBagConstraints gbc_E10 = new GridBagConstraints();
-		gbc_E10.fill = GridBagConstraints.BOTH;
-		gbc_E10.gridx = 0;
-		gbc_E10.gridy = 2;
-		tabStat.add(E10, gbc_E10);
-		
-		
-		////
-		// mettre l'appel au données
-		////
-		
-		graph e10 = new graph("E10", " Date", "Prix Moyen", donnees, Color.white	, l2, l1, true);
-		e10.setPreferredSize(new Dimension(1200, 500));
-		E10.add(e10);
 
 		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// JBUTTONS (Carte, Liste, Stat)
@@ -631,19 +608,11 @@ public class JxBrowserDemo extends JFrame {
 				if (ListeStationsDAO.size() > 0) {
 					System.out.println(ListeStationsDAO.size());
 					
-					/*for (Station station : ListeStationsDAO) {
-						
-						System.out.println("-> Num " + ++index + " | Station ID : " + station[0] + " | Adresse : "
-								+ station[1] + " | Code Postal : " + station[2] + " | Ville : " + station[3]
-								+ " | Lat : " + station[4] + " | Long : " + station[5]);
-					}*/
+					
 					System.out.println(">>> End of process [OK]");
 
 					int indexTabList = 1;
-					/*
-					 * for (int i = 0; i < ListeStations.size(); i++) { new
-					 * FrameStation(tabListe, indexTabList); indexTabList++; }
-					 */
+					
 					for (Station station : ListeStationsDAO) {
 
 						new FrameStation(tabListe, indexTabList,  station, carbChoix);
@@ -652,7 +621,7 @@ public class JxBrowserDemo extends JFrame {
 					}
 
 				} else {
-					System.out.println(">>> La liste des staions est vide !!!");
+					System.out.println(">>> La liste des stations est vide !!!");
 				}
 			}
 		});
@@ -662,7 +631,16 @@ public class JxBrowserDemo extends JFrame {
 		gbc_btnListeStations.gridx = 3;
 		gbc_btnListeStations.gridy = 1;
 		panel_1.add(btnListeStations, gbc_btnListeStations);
-
+		
+		////////////////////Generation du graphique StatLoc/////////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////
+		
+		
+		
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		
+		
 		JButton btnInfos = new JButton("Statistiques");
 		btnInfos.setBackground(new Color(39, 39, 39));
 		btnInfos.setForeground(new Color(138, 202, 206));
@@ -672,8 +650,42 @@ public class JxBrowserDemo extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				myCardLayout.show(myCards, "Statistique");
-
 				
+				
+
+				for (Station station : stations)
+				{
+				System.out.println(station.getNom());	
+				
+				}			
+				
+				VendreDao.recupereStats(stations);
+				
+				for (Stats stats : VendreDao.recupereStats(stations))
+				{
+					donneesLoc.add(stats.getMoyenne()/1000);
+					l1Loc.add(stats.getCarburant().getNom());
+					System.out.println(stats.getCarburant().getNom());
+					System.out.println(stats.getMoyenne());
+				}
+				
+				
+				JPanel graphiqueLocal = new JPanel();
+				graphiqueLocal.setBackground(Color.BLACK);
+				GridBagConstraints gbc_SP95 = new GridBagConstraints();
+				gbc_SP95.insets = new Insets(0, 0, 5, 0);
+				gbc_SP95.fill = GridBagConstraints.BOTH;
+				gbc_SP95.gridx = 0;
+				gbc_SP95.gridy = 1;
+				tabStat.add(graphiqueLocal, gbc_SP95);
+				
+				l2Loc.add("0");
+				
+				graph graphLoc = new graph("Prix Moyen dans zone de recherche (en €)", " Carburants", "Prix Moyen Local", donneesLoc, Color.white	, l2Loc, l1Loc, true);
+				graphLoc.setPreferredSize(new Dimension(1200, 500));
+				graphiqueLocal.add(graphLoc);
+//
+				graphLoc.revalidate();
 
 			}
 		});
@@ -724,7 +736,14 @@ public class JxBrowserDemo extends JFrame {
 
 		// Import de la carte de la page HTML (du serveur?) sur le browser
 		browser.loadURL(workingDir + "\\src\\Data\\HTML\\map.html");
+		
+		
+		
+	
 
+			System.out.println(stations.size());
+		
+		
 	}
 
 }

@@ -13,6 +13,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
@@ -75,7 +76,7 @@ public class graph extends JPanel {
 			}
 
 		}
-		JFreeChart chart = ChartFactory.createLineChart(
+		JFreeChart chart = ChartFactory.createBarChart(
 				titre,   					// chart title
 				abscisse,					// domain axis label
 				ordonnee,   				// range axis label
@@ -92,26 +93,30 @@ public class graph extends JPanel {
 		CategoryPlot plot = (CategoryPlot) chart.getPlot();
 
 		//valeur comprise entre 0 et 1 transparence de la zone graphique
-		plot.setBackgroundAlpha(0.9f);
-
+		plot.setBackgroundAlpha(1);
+				
 		NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+		rangeAxis.setTickUnit(new NumberTickUnit(0.05));
+		rangeAxis.setLowerBound(0);
 		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-		/*BarRenderer renderer = (BarRenderer) plot.getRenderer();
+		BarRenderer renderer = (BarRenderer) plot.getRenderer();
 		renderer.setDrawBarOutline(false);
 
 		// pour la couleur des barres pour chaque serie
+		
+			for (int s=0; s<categories.size(); s++){
+				GradientPaint gp0 = new GradientPaint(0.0f, 0.0f, couleursBarres[s],0.0f, 0.0f, new Color(0, 40, 70));
+				renderer.setSeriesPaint(s, gp0);
 
-		for (int s=0; s<series.size(); s++){
-			GradientPaint gp0 = new GradientPaint(0.0f, 0.0f, couleursBarres[s],
-					0.0f, 0.0f, new Color(0, 40, 70));
-			renderer.setSeriesPaint(s, gp0);
-
-		}	*/	
+			}	
+		
+				
 
 		ChartPanel chartPanel = new ChartPanel(chart);
-		chartPanel.setFillZoomRectangle(true);
-		chartPanel.setMouseWheelEnabled(true);
+		chartPanel.setFillZoomRectangle(false);
+		chartPanel.setMouseWheelEnabled(false);
+		chartPanel.setVerticalAxisTrace(true);
 		//chartPanel.setPreferredSize(new Dimension(100, 100));
 
 		add(chartPanel);
